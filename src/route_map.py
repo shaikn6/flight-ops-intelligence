@@ -6,6 +6,7 @@ generate_route_risk_map(flights) → HTML string
 
 from __future__ import annotations
 
+import html as _html
 from dataclasses import dataclass
 from typing import List, Optional
 
@@ -179,14 +180,15 @@ def generate_route_risk_map(
     """
     m.get_root().html.add_child(folium.Element(legend_html))
 
-    # Title bar
+    # Title bar — escape the title to prevent XSS via caller-supplied strings.
+    safe_title = _html.escape(title)
     title_html = f"""
     <div style="position:fixed;top:12px;left:50%;transform:translateX(-50%);
                 z-index:1000;background:#0d1117cc;border:1px solid #30363d;
                 border-radius:8px;padding:8px 20px;font-family:monospace;
                 color:#58a6ff;font-size:15px;font-weight:bold;
                 letter-spacing:1px;backdrop-filter:blur(8px);">
-        {title}
+        {safe_title}
     </div>
     """
     m.get_root().html.add_child(folium.Element(title_html))

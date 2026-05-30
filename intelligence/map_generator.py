@@ -5,6 +5,7 @@ Creates flight path maps with weather overlays and delay color-coding.
 
 from __future__ import annotations
 
+import html as _html
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -50,30 +51,45 @@ def _weather_circle_radius(impact_score: float) -> float:
 # ---------------------------------------------------------------------------
 
 def _airport_popup(code: str, weather_engine: WeatherEngine) -> str:
-    """Build HTML popup for an airport marker."""
+    """Build HTML popup for an airport marker.
+
+    All values interpolated into HTML come from the internal AIRPORTS dict
+    and the synthetic weather engine — not from user input.  They are escaped
+    here as a defence-in-depth measure in case the data source ever changes.
+    """
     info = AIRPORTS[code]
     ts = datetime(2024, 1, 1, 9, 0)
     rpt = weather_engine.get_weather(code, ts)
+    e = _html.escape
     return (
-        f"<b>{code}</b> — {info['city']}<br>"
-        f"<small>{info['name']}</small><br><hr>"
+        f"<b>{e(code)}</b> — {e(info['city'])}<br>"
+        f"<small>{e(info['name'])}</small><br><hr>"
         f"Wind: {rpt.wind_speed_kts:.0f} kts @ {rpt.wind_dir_deg:.0f}°<br>"
         f"Visibility: {rpt.visibility_sm:.1f} sm<br>"
         f"Ceiling: {rpt.ceiling_ft:,} ft<br>"
-        f"Conditions: <b>{rpt.conditions}</b><br>"
+        f"Conditions: <b>{e(rpt.conditions)}</b><br>"
         f"Impact score: <b>{rpt.weather_impact_score:.2f}</b>"
     )
 
 
 def _flight_popup(row: pd.Series) -> str:
-    """Build HTML popup for a flight path."""
+    """Build HTML popup for a flight path.
+
+    Values come from the synthetic CSV dataset; they are escaped here so that
+    any data-pipeline contamination cannot inject HTML into Folium popups.
+    """
+    e = _html.escape
     delay = row.get("delay_minutes", 0)
     status = "On-time" if delay < 15 else f"+{delay:.0f} min"
-    cause = row.get("delay_cause", "none")
+    cause = e(str(row.get("delay_cause", "none")))
+    flight_num = e(str(row.get("flight_number", row.get("flight_id", ""))))
+    origin = e(str(row["origin"]))
+    destination = e(str(row["destination"]))
+    aircraft = e(str(row.get("aircraft_type", "N/A")))
     return (
-        f"<b>{row.get('flight_number', row.get('flight_id', ''))}</b><br>"
-        f"{row['origin']} → {row['destination']}<br>"
-        f"Aircraft: {row.get('aircraft_type', 'N/A')}<br>"
+        f"<b>{flight_num}</b><br>"
+        f"{origin} → {destination}<br>"
+        f"Aircraft: {aircraft}<br>"
         f"Delay: <b>{status}</b><br>"
         f"Cause: {cause}<br>"
         f"Distance: {row.get('distance_mi', 0):.0f} mi"

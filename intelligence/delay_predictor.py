@@ -20,7 +20,10 @@ from sklearn.preprocessing import LabelEncoder
 from intelligence.flight_data import AIRPORTS, AIRCRAFT_TYPES, generate_flights, load_flights
 from intelligence.weather_engine import WeatherEngine, get_engine
 
-MODEL_PATH = Path("models/delay_rf.pkl")
+# Model path is intentionally hardcoded — it is never derived from user input.
+# The resolved-path guard in load_models() below prevents any future
+# path-traversal if this value were ever made configurable.
+MODEL_PATH = (Path(__file__).parent.parent / "models" / "delay_rf.pkl").resolve()
 
 FEATURE_COLS = [
     "dep_hour",
@@ -189,7 +192,19 @@ def train(df: Optional[pd.DataFrame] = None, save: bool = True) -> TrainedModels
 
 
 def load_models() -> TrainedModels:
-    """Load trained models from disk, training fresh if absent."""
+    """Load trained models from disk, training fresh if absent.
+
+    The resolved path is verified to be inside the expected models/ directory
+    so that this function is safe even if MODEL_PATH were ever derived from
+    external configuration.
+    """
+    expected_dir = (Path(__file__).parent.parent / "models").resolve()
+    resolved = MODEL_PATH.resolve()
+    if not str(resolved).startswith(str(expected_dir)):
+        raise ValueError(
+            f"Model path '{resolved}' is outside the expected models/ directory. "
+            "Refusing to load."
+        )
     if not MODEL_PATH.exists():
         print("[delay_predictor] No saved model found — training now…")
         return train()

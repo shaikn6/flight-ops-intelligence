@@ -5,23 +5,84 @@ Exposes endpoints for flights, weather, delay predictions, and route analysis.
 
 from __future__ import annotations
 
+import logging
+import os
+import re
 import json
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 
-from fastapi import FastAPI, Depends, HTTPException, Query
+from fastapi import FastAPI, Depends, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, FileResponse
-from pydantic import BaseModel, Field
+from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.orm import Session
 
 from api.database import get_db, init_db
 from api.models import Flight as FlightModel, WeatherReport as WeatherModel
 
+logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Rate limiting — 60 requests/minute per IP on the prediction endpoint.
+# Uses slowapi (Starlette-native wrapper around limits).
+# ---------------------------------------------------------------------------
+
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+
+_limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
+
+# ---------------------------------------------------------------------------
+# Input validation helpers
+# ---------------------------------------------------------------------------
+
+# IATA codes are exactly 3 uppercase ASCII letters.
+_IATA_RE = re.compile(r"^[A-Z]{3}$")
+# Aircraft type allowlist — must match the known training set values.
+_ALLOWED_AIRCRAFT = frozenset(["Boeing 737", "Boeing 777", "Airbus A320", "Airbus A321"])
+# Flight-ID format: airline (2 chars) + digits.
+_FLIGHT_ID_RE = re.compile(r"^[A-Z0-9]{2,10}$")
+
+
+def _validate_iata(code: str, field_name: str = "airport") -> str:
+    """Raise HTTP 422 if code is not a valid 3-letter IATA code."""
+    code = code.strip().upper()
+    if not _IATA_RE.match(code):
+        raise HTTPException(
+            status_code=422,
+            detail=f"Invalid {field_name} code '{code}'. Must be exactly 3 uppercase letters.",
+        )
+    return code
+
+
+def _validate_aircraft_type(aircraft_type: str) -> str:
+    """Raise HTTP 422 if aircraft type is not in the known allowlist."""
+    if aircraft_type not in _ALLOWED_AIRCRAFT:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                f"Unknown aircraft type '{aircraft_type}'. "
+                f"Must be one of: {sorted(_ALLOWED_AIRCRAFT)}"
+            ),
+        )
+    return aircraft_type
+
+
 # ---------------------------------------------------------------------------
 # App setup
 # ---------------------------------------------------------------------------
+
+# CORS: restrict origins to configured list; falls back to localhost-only for
+# development.  Set ALLOWED_ORIGINS env var (comma-separated) in production.
+_raw_origins = os.environ.get("ALLOWED_ORIGINS", "")
+ALLOWED_ORIGINS: List[str] = (
+    [o.strip() for o in _raw_origins.split(",") if o.strip()]
+    if _raw_origins
+    else ["http://localhost:3000", "http://localhost:8501", "http://127.0.0.1:8501"]
+)
 
 app = FastAPI(
     title="Flight Ops Intelligence API",
@@ -30,17 +91,36 @@ app = FastAPI(
         "Provides delay predictions, weather impact scores, "
         "route risk analysis, and ATC sector load data."
     ),
-    version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
+    version="1.1.0",
+    # Disable interactive docs in production via env var
+    docs_url="/docs" if os.environ.get("ENVIRONMENT") != "production" else None,
+    redoc_url="/redoc" if os.environ.get("ENVIRONMENT") != "production" else None,
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "Authorization"],
+    allow_credentials=False,
 )
+
+# Wire rate-limiter state and its 429 error handler.
+app.state.limiter = _limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+
+# ---------------------------------------------------------------------------
+# Global exception handler — suppress internal details from API consumers
+# ---------------------------------------------------------------------------
+
+@app.exception_handler(Exception)
+async def _generic_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    logger.exception("Unhandled error on %s %s", request.method, request.url.path)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "An internal error occurred. Please try again later."},
+    )
 
 
 @app.on_event("startup")
@@ -178,18 +258,18 @@ def root() -> str:
 
 @app.get("/flights", response_model=List[FlightOut])
 def list_flights(
-    origin: Optional[str] = Query(None, description="Filter by origin IATA"),
-    destination: Optional[str] = Query(None, description="Filter by destination IATA"),
+    origin: Optional[str] = Query(None, description="Filter by origin IATA (3 letters)", max_length=3),
+    destination: Optional[str] = Query(None, description="Filter by destination IATA (3 letters)", max_length=3),
     is_delayed: Optional[bool] = Query(None, description="Filter delayed flights"),
-    limit: int = Query(50, le=500, description="Max results"),
+    limit: int = Query(50, ge=1, le=200, description="Max results"),
     db: Session = Depends(get_db),
 ) -> List[FlightOut]:
     """List flights with optional filters."""
     q = db.query(FlightModel)
     if origin:
-        q = q.filter(FlightModel.origin == origin.upper())
+        q = q.filter(FlightModel.origin == _validate_iata(origin, "origin"))
     if destination:
-        q = q.filter(FlightModel.destination == destination.upper())
+        q = q.filter(FlightModel.destination == _validate_iata(destination, "destination"))
     if is_delayed is not None:
         q = q.filter(FlightModel.is_delayed == is_delayed)
     return q.limit(limit).all()
@@ -198,9 +278,12 @@ def list_flights(
 @app.get("/flights/{flight_id}", response_model=FlightOut)
 def get_flight(flight_id: str, db: Session = Depends(get_db)) -> FlightOut:
     """Get a single flight by ID."""
-    flight = db.query(FlightModel).filter(FlightModel.flight_id == flight_id).first()
+    # Sanitize flight_id: only allow alphanumeric + dash, max 20 chars.
+    if not re.match(r"^[A-Z0-9\-]{2,20}$", flight_id.upper()):
+        raise HTTPException(status_code=422, detail="Invalid flight_id format.")
+    flight = db.query(FlightModel).filter(FlightModel.flight_id == flight_id.upper()).first()
     if not flight:
-        raise HTTPException(status_code=404, detail=f"Flight {flight_id!r} not found")
+        raise HTTPException(status_code=404, detail="Flight not found.")
     return flight
 
 
@@ -208,9 +291,9 @@ def get_flight(flight_id: str, db: Session = Depends(get_db)) -> FlightOut:
 def get_airport_weather(airport: str, hour: int = Query(9, ge=0, le=23)) -> WeatherOut:
     """Get current synthetic weather for an airport."""
     from intelligence.weather_engine import get_weather, CLIMATE_PROFILES
-    airport = airport.upper()
+    airport = _validate_iata(airport, "airport")
     if airport not in CLIMATE_PROFILES:
-        raise HTTPException(status_code=404, detail=f"Unknown airport: {airport}")
+        raise HTTPException(status_code=404, detail="Airport not found.")
     ts = datetime(2024, 1, 15, hour, 0)
     rpt = get_weather(airport, ts)
     return WeatherOut(
@@ -224,13 +307,15 @@ def get_airport_weather(airport: str, hour: int = Query(9, ge=0, le=23)) -> Weat
 
 
 @app.get("/predict", response_model=DelayPredictionOut)
+@_limiter.limit("30/minute")
 def predict_delay(
-    origin: str = Query(..., description="Origin IATA code"),
-    destination: str = Query(..., description="Destination IATA code"),
+    request: Request,
+    origin: str = Query(..., description="Origin IATA code (3 letters)", max_length=3),
+    destination: str = Query(..., description="Destination IATA code (3 letters)", max_length=3),
     dep_hour: int = Query(9, ge=0, le=23),
     day_of_week: int = Query(0, ge=0, le=6),
-    aircraft_type: str = Query("Boeing 737"),
-    distance_mi: Optional[float] = Query(None),
+    aircraft_type: str = Query("Boeing 737", max_length=32),
+    distance_mi: Optional[float] = Query(None, ge=1.0, le=15000.0),
 ) -> DelayPredictionOut:
     """Predict departure delay for a flight."""
     from intelligence.delay_predictor import predict_delay as _predict
@@ -238,8 +323,9 @@ def predict_delay(
     from intelligence.flight_data import AIRPORTS
     import math
 
-    origin = origin.upper()
-    dest = destination.upper()
+    origin = _validate_iata(origin, "origin")
+    dest = _validate_iata(destination, "destination")
+    _validate_aircraft_type(aircraft_type)
 
     ts = datetime(2024, 1, 15, dep_hour, 0)
     origin_score = get_weather_impact_score(origin, ts) if origin in AIRPORTS else 0.3
@@ -287,20 +373,22 @@ def predict_delay(
 
 
 @app.get("/route-risk", response_model=RouteRiskOut)
+@_limiter.limit("30/minute")
 def route_risk(
-    origin: str = Query(...),
-    destination: str = Query(...),
+    request: Request,
+    origin: str = Query(..., description="Origin IATA code (3 letters)", max_length=3),
+    destination: str = Query(..., description="Destination IATA code (3 letters)", max_length=3),
     dep_hour: int = Query(9, ge=0, le=23),
 ) -> RouteRiskOut:
     """Compute weather risk score along a route."""
     from intelligence.route_analyzer import compute_route_risk_score
     from intelligence.flight_data import AIRPORTS
 
-    origin = origin.upper()
-    destination = destination.upper()
+    origin = _validate_iata(origin, "origin")
+    destination = _validate_iata(destination, "destination")
     for code, name in [(origin, "origin"), (destination, "destination")]:
         if code not in AIRPORTS:
-            raise HTTPException(status_code=404, detail=f"Unknown {name} airport: {code}")
+            raise HTTPException(status_code=404, detail=f"Unknown {name} airport.")
 
     ts = datetime(2024, 1, 15, dep_hour, 0)
     analysis = compute_route_risk_score(origin, destination, ts)
@@ -382,8 +470,20 @@ def stats(db: Session = Depends(get_db)) -> StatsOut:
 
 @app.get("/map", response_class=HTMLResponse)
 def serve_map() -> str:
-    """Serve the generated Folium flight map."""
-    map_path = Path("maps/flight_map.html")
+    """Serve the pre-generated Folium flight map (static file, not user-controlled)."""
+    # Resolve against the project root so path traversal via symlink or relative
+    # segments cannot escape the expected directory.
+    base = Path(__file__).parent.parent.resolve()
+    map_path = (base / "maps" / "flight_map.html").resolve()
+
+    # Confirm the resolved path is still inside the expected directory.
+    if not str(map_path).startswith(str(base / "maps")):
+        raise HTTPException(status_code=400, detail="Invalid map path.")
+
     if not map_path.exists():
-        return "<html><body><p>Map not yet generated. Run: python -m intelligence.map_generator</p></body></html>"
-    return map_path.read_text()
+        return (
+            "<html><body>"
+            "<p>Map not yet generated. Run: python -m intelligence.map_generator</p>"
+            "</body></html>"
+        )
+    return map_path.read_text(encoding="utf-8")

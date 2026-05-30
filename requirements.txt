@@ -28,6 +28,9 @@ httpx>=0.27
 # Utilities
 python-dotenv==1.0.1
 
+# Rate limiting
+slowapi>=0.1.9
+
 # ── V2 additions ──────────────────────────────────────────────────────────────
 
 # Live ADS-B
