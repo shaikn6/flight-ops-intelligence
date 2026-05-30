@@ -1,0 +1,3373 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~8.8.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 38.5,
+    "longitude": -96.0,
+    "pitch": 30,
+    "zoom": 3.5
+  },
+  "layers": [
+    {
+      "@@type": "ScatterplotLayer",
+      "data": [
+        {
+          "altitude_ft": 35461.0,
+          "altitude_m": 10808.4,
+          "callsign": "AAL2094",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 274.0,
+          "lat": 43.5749,
+          "lon": -98.8617,
+          "velocity_knots": 515.0
+        },
+        {
+          "altitude_ft": 30562.0,
+          "altitude_m": 9315.3,
+          "callsign": "UAL1032",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 231.8,
+          "lat": 43.8655,
+          "lon": -115.9538,
+          "velocity_knots": 494.9
+        },
+        {
+          "altitude_ft": 33319.0,
+          "altitude_m": 10155.6,
+          "callsign": "DAL8889",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 227.4,
+          "lat": 44.7463,
+          "lon": -98.6122,
+          "velocity_knots": 454.5
+        },
+        {
+          "altitude_ft": 38397.0,
+          "altitude_m": 11703.3,
+          "callsign": "SWA731",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 70.1,
+          "lat": 43.1941,
+          "lon": -103.5011,
+          "velocity_knots": 434.5
+        },
+        {
+          "altitude_ft": 18636.0,
+          "altitude_m": 5680.3,
+          "callsign": "ASA9232",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 117.3,
+          "lat": 36.2013,
+          "lon": -120.5908,
+          "velocity_knots": 511.7
+        },
+        {
+          "altitude_ft": 7530.0,
+          "altitude_m": 2295.1,
+          "callsign": "JBU7472",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 81.7,
+          "lat": 33.891,
+          "lon": -97.1744,
+          "velocity_knots": 310.8
+        },
+        {
+          "altitude_ft": 35504.0,
+          "altitude_m": 10821.6,
+          "callsign": "FFT1062",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 289.7,
+          "lat": 41.0755,
+          "lon": -98.9566,
+          "velocity_knots": 456.5
+        },
+        {
+          "altitude_ft": 27096.0,
+          "altitude_m": 8258.9,
+          "callsign": "NKS3192",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 2.7,
+          "lat": 34.2995,
+          "lon": -107.142,
+          "velocity_knots": 198.3
+        },
+        {
+          "altitude_ft": 36711.0,
+          "altitude_m": 11189.5,
+          "callsign": "WJA5600",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 50.3,
+          "lat": 43.8862,
+          "lon": -86.4332,
+          "velocity_knots": 348.8
+        },
+        {
+          "altitude_ft": 33479.0,
+          "altitude_m": 10204.3,
+          "callsign": "SKW4642",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 228.5,
+          "lat": 27.7487,
+          "lon": -86.2378,
+          "velocity_knots": 428.8
+        },
+        {
+          "altitude_ft": 25462.0,
+          "altitude_m": 7760.9,
+          "callsign": "AAL3539",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 147.1,
+          "lat": 38.2859,
+          "lon": -92.2436,
+          "velocity_knots": 204.3
+        },
+        {
+          "altitude_ft": 1385.0,
+          "altitude_m": 422.1,
+          "callsign": "UAL4423",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 238.3,
+          "lat": 45.4817,
+          "lon": -110.1333,
+          "velocity_knots": 236.6
+        },
+        {
+          "altitude_ft": 31096.0,
+          "altitude_m": 9478.0,
+          "callsign": "DAL4237",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 8.2,
+          "lat": 38.3688,
+          "lon": -79.8856,
+          "velocity_knots": 184.9
+        },
+        {
+          "altitude_ft": 27419.0,
+          "altitude_m": 8357.3,
+          "callsign": "SWA8157",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 54.8,
+          "lat": 27.1611,
+          "lon": -83.2702,
+          "velocity_knots": 321.1
+        },
+        {
+          "altitude_ft": 29523.0,
+          "altitude_m": 8998.5,
+          "callsign": "ASA6867",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 31.6,
+          "lat": 41.7117,
+          "lon": -98.4614,
+          "velocity_knots": 264.4
+        },
+        {
+          "altitude_ft": 35496.0,
+          "altitude_m": 10819.1,
+          "callsign": "JBU6339",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 348.9,
+          "lat": 27.8321,
+          "lon": -70.0956,
+          "velocity_knots": 225.1
+        },
+        {
+          "altitude_ft": 29084.0,
+          "altitude_m": 8864.7,
+          "callsign": "FFT884",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 164.1,
+          "lat": 43.69,
+          "lon": -83.571,
+          "velocity_knots": 485.0
+        },
+        {
+          "altitude_ft": 27652.0,
+          "altitude_m": 8428.2,
+          "callsign": "NKS1054",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 273.1,
+          "lat": 29.8567,
+          "lon": -106.1724,
+          "velocity_knots": 466.4
+        },
+        {
+          "altitude_ft": 33761.0,
+          "altitude_m": 10290.5,
+          "callsign": "WJA1037",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 149.7,
+          "lat": 42.2671,
+          "lon": -99.2349,
+          "velocity_knots": 151.0
+        },
+        {
+          "altitude_ft": 27168.0,
+          "altitude_m": 8280.8,
+          "callsign": "SKW6532",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 211.6,
+          "lat": 25.9987,
+          "lon": -95.8305,
+          "velocity_knots": 158.8
+        },
+        {
+          "altitude_ft": 30203.0,
+          "altitude_m": 9205.9,
+          "callsign": "AAL6162",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 345.1,
+          "lat": 29.0942,
+          "lon": -72.1184,
+          "velocity_knots": 126.0
+        },
+        {
+          "altitude_ft": 2395.0,
+          "altitude_m": 730.0,
+          "callsign": "UAL5949",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 337.6,
+          "lat": 36.5753,
+          "lon": -79.9496,
+          "velocity_knots": 316.9
+        },
+        {
+          "altitude_ft": 29973.0,
+          "altitude_m": 9135.9,
+          "callsign": "DAL5494",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 7.8,
+          "lat": 38.7215,
+          "lon": -96.9581,
+          "velocity_knots": 295.9
+        },
+        {
+          "altitude_ft": 16046.0,
+          "altitude_m": 4890.7,
+          "callsign": "SWA5254",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 242.0,
+          "lat": 44.831,
+          "lon": -73.7112,
+          "velocity_knots": 161.0
+        },
+        {
+          "altitude_ft": 36530.0,
+          "altitude_m": 11134.3,
+          "callsign": "ASA3274",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 82.9,
+          "lat": 31.7496,
+          "lon": -86.7318,
+          "velocity_knots": 490.7
+        },
+        {
+          "altitude_ft": 37447.0,
+          "altitude_m": 11413.8,
+          "callsign": "JBU1166",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 114.2,
+          "lat": 25.8979,
+          "lon": -92.4831,
+          "velocity_knots": 446.5
+        },
+        {
+          "altitude_ft": 28840.0,
+          "altitude_m": 8790.3,
+          "callsign": "FFT9913",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 16.2,
+          "lat": 47.8696,
+          "lon": -106.9995,
+          "velocity_knots": 183.9
+        },
+        {
+          "altitude_ft": 36229.0,
+          "altitude_m": 11042.6,
+          "callsign": "NKS9365",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 321.6,
+          "lat": 35.4423,
+          "lon": -68.4193,
+          "velocity_knots": 480.4
+        },
+        {
+          "altitude_ft": 34925.0,
+          "altitude_m": 10645.1,
+          "callsign": "WJA4160",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 268.8,
+          "lat": 37.4526,
+          "lon": -105.6239,
+          "velocity_knots": 155.1
+        },
+        {
+          "altitude_ft": 26841.0,
+          "altitude_m": 8181.2,
+          "callsign": "SKW3798",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 55.2,
+          "lat": 31.2991,
+          "lon": -71.4753,
+          "velocity_knots": 455.9
+        },
+        {
+          "altitude_ft": 27947.0,
+          "altitude_m": 8518.1,
+          "callsign": "AAL2876",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 349.9,
+          "lat": 29.3024,
+          "lon": -90.0339,
+          "velocity_knots": 434.1
+        },
+        {
+          "altitude_ft": 1130.0,
+          "altitude_m": 344.5,
+          "callsign": "UAL3171",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 244.0,
+          "lat": 37.0178,
+          "lon": -115.0856,
+          "velocity_knots": 170.5
+        },
+        {
+          "altitude_ft": 33717.0,
+          "altitude_m": 10276.9,
+          "callsign": "DAL4228",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 257.5,
+          "lat": 27.924,
+          "lon": -95.1519,
+          "velocity_knots": 445.0
+        },
+        {
+          "altitude_ft": 23546.0,
+          "altitude_m": 7176.7,
+          "callsign": "SWA2077",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 108.3,
+          "lat": 42.7356,
+          "lon": -115.7918,
+          "velocity_knots": 279.0
+        },
+        {
+          "altitude_ft": 29297.0,
+          "altitude_m": 8929.6,
+          "callsign": "ASA9605",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 199.9,
+          "lat": 36.726,
+          "lon": -86.5425,
+          "velocity_knots": 126.7
+        },
+        {
+          "altitude_ft": 13337.0,
+          "altitude_m": 4065.0,
+          "callsign": "JBU9254",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 214.6,
+          "lat": 40.2154,
+          "lon": -117.1756,
+          "velocity_knots": 511.1
+        },
+        {
+          "altitude_ft": 36771.0,
+          "altitude_m": 11207.9,
+          "callsign": "FFT8484",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 298.6,
+          "lat": 47.3926,
+          "lon": -78.7601,
+          "velocity_knots": 161.2
+        },
+        {
+          "altitude_ft": 34090.0,
+          "altitude_m": 10390.7,
+          "callsign": "NKS276",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 217.1,
+          "lat": 44.1236,
+          "lon": -110.2048,
+          "velocity_knots": 470.8
+        },
+        {
+          "altitude_ft": 34779.0,
+          "altitude_m": 10600.6,
+          "callsign": "WJA9628",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 89.2,
+          "lat": 34.9017,
+          "lon": -102.4199,
+          "velocity_knots": 301.9
+        },
+        {
+          "altitude_ft": 26579.0,
+          "altitude_m": 8101.3,
+          "callsign": "SKW8687",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 214.0,
+          "lat": 30.6799,
+          "lon": -81.9692,
+          "velocity_knots": 143.9
+        },
+        {
+          "altitude_ft": 27158.0,
+          "altitude_m": 8277.8,
+          "callsign": "AAL9160",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 102.5,
+          "lat": 28.5082,
+          "lon": -77.6435,
+          "velocity_knots": 184.3
+        },
+        {
+          "altitude_ft": 273.0,
+          "altitude_m": 83.1,
+          "callsign": "UAL9216",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 19.2,
+          "lat": 28.6867,
+          "lon": -116.648,
+          "velocity_knots": 188.0
+        },
+        {
+          "altitude_ft": 29770.0,
+          "altitude_m": 9073.9,
+          "callsign": "DAL9844",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 306.4,
+          "lat": 39.1875,
+          "lon": -85.5607,
+          "velocity_knots": 473.9
+        },
+        {
+          "altitude_ft": 28741.0,
+          "altitude_m": 8760.2,
+          "callsign": "SWA5094",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 149.9,
+          "lat": 26.0434,
+          "lon": -113.0176,
+          "velocity_knots": 349.9
+        },
+        {
+          "altitude_ft": 26525.0,
+          "altitude_m": 8084.8,
+          "callsign": "ASA1023",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 332.9,
+          "lat": 26.1821,
+          "lon": -102.4512,
+          "velocity_knots": 137.8
+        },
+        {
+          "altitude_ft": 39694.0,
+          "altitude_m": 12098.6,
+          "callsign": "JBU8350",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 280.6,
+          "lat": 27.3787,
+          "lon": -76.6034,
+          "velocity_knots": 444.0
+        },
+        {
+          "altitude_ft": 15685.0,
+          "altitude_m": 4780.7,
+          "callsign": "FFT3298",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 166.6,
+          "lat": 40.4196,
+          "lon": -80.1552,
+          "velocity_knots": 466.8
+        },
+        {
+          "altitude_ft": 27096.0,
+          "altitude_m": 8259.0,
+          "callsign": "NKS5190",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 150.1,
+          "lat": 34.2421,
+          "lon": -87.824,
+          "velocity_knots": 311.8
+        },
+        {
+          "altitude_ft": 29912.0,
+          "altitude_m": 9117.3,
+          "callsign": "WJA4395",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 106.9,
+          "lat": 30.5817,
+          "lon": -102.7869,
+          "velocity_knots": 396.6
+        },
+        {
+          "altitude_ft": 29926.0,
+          "altitude_m": 9121.3,
+          "callsign": "SKW3856",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 305.5,
+          "lat": 47.7726,
+          "lon": -72.6009,
+          "velocity_knots": 335.1
+        },
+        {
+          "altitude_ft": 34494.0,
+          "altitude_m": 10513.7,
+          "callsign": "AAL817",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 72.9,
+          "lat": 40.6621,
+          "lon": -78.7584,
+          "velocity_knots": 416.6
+        },
+        {
+          "altitude_ft": 17257.0,
+          "altitude_m": 5260.0,
+          "callsign": "UAL2952",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 261.3,
+          "lat": 41.6752,
+          "lon": -75.6605,
+          "velocity_knots": 155.5
+        },
+        {
+          "altitude_ft": 24174.0,
+          "altitude_m": 7368.3,
+          "callsign": "DAL1776",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 281.7,
+          "lat": 27.0278,
+          "lon": -71.5233,
+          "velocity_knots": 359.1
+        },
+        {
+          "altitude_ft": 33851.0,
+          "altitude_m": 10317.8,
+          "callsign": "SWA8027",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 221.8,
+          "lat": 44.0828,
+          "lon": -70.9685,
+          "velocity_knots": 155.5
+        },
+        {
+          "altitude_ft": 31990.0,
+          "altitude_m": 9750.5,
+          "callsign": "ASA6824",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 287.7,
+          "lat": 29.111,
+          "lon": -91.9277,
+          "velocity_knots": 428.5
+        },
+        {
+          "altitude_ft": 26796.0,
+          "altitude_m": 8167.4,
+          "callsign": "JBU5273",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 31.6,
+          "lat": 36.8117,
+          "lon": -90.0224,
+          "velocity_knots": 164.5
+        },
+        {
+          "altitude_ft": 35069.0,
+          "altitude_m": 10688.9,
+          "callsign": "FFT7331",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 274.5,
+          "lat": 40.7887,
+          "lon": -99.9765,
+          "velocity_knots": 483.5
+        },
+        {
+          "altitude_ft": 27364.0,
+          "altitude_m": 8340.6,
+          "callsign": "NKS3402",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 337.0,
+          "lat": 31.4928,
+          "lon": -102.9694,
+          "velocity_knots": 176.9
+        },
+        {
+          "altitude_ft": 33295.0,
+          "altitude_m": 10148.3,
+          "callsign": "WJA9494",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 172.6,
+          "lat": 35.5097,
+          "lon": -101.9174,
+          "velocity_knots": 435.3
+        },
+        {
+          "altitude_ft": 39268.0,
+          "altitude_m": 11968.9,
+          "callsign": "SKW9366",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 306.2,
+          "lat": 34.0326,
+          "lon": -68.7353,
+          "velocity_knots": 165.0
+        },
+        {
+          "altitude_ft": 35291.0,
+          "altitude_m": 10756.8,
+          "callsign": "AAL5490",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 297.1,
+          "lat": 40.2898,
+          "lon": -116.2943,
+          "velocity_knots": 302.1
+        },
+        {
+          "altitude_ft": 29529.0,
+          "altitude_m": 9000.4,
+          "callsign": "UAL221",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 281.3,
+          "lat": 32.0886,
+          "lon": -97.7799,
+          "velocity_knots": 491.6
+        },
+        {
+          "altitude_ft": 29259.0,
+          "altitude_m": 8918.0,
+          "callsign": "DAL7801",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 359.7,
+          "lat": 27.6541,
+          "lon": -68.1631,
+          "velocity_knots": 160.0
+        },
+        {
+          "altitude_ft": 4415.0,
+          "altitude_m": 1345.6,
+          "callsign": "SWA8384",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 86.7,
+          "lat": 40.9764,
+          "lon": -87.2431,
+          "velocity_knots": 128.5
+        },
+        {
+          "altitude_ft": 23206.0,
+          "altitude_m": 7073.1,
+          "callsign": "ASA2959",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 2.0,
+          "lat": 28.4325,
+          "lon": -80.2778,
+          "velocity_knots": 131.4
+        },
+        {
+          "altitude_ft": 28578.0,
+          "altitude_m": 8710.7,
+          "callsign": "JBU6596",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 20.6,
+          "lat": 26.2398,
+          "lon": -89.6741,
+          "velocity_knots": 463.4
+        },
+        {
+          "altitude_ft": 35472.0,
+          "altitude_m": 10811.8,
+          "callsign": "FFT8215",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 72.6,
+          "lat": 44.2231,
+          "lon": -71.9713,
+          "velocity_knots": 133.0
+        },
+        {
+          "altitude_ft": 34450.0,
+          "altitude_m": 10500.4,
+          "callsign": "NKS8395",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 55.9,
+          "lat": 27.9982,
+          "lon": -95.2508,
+          "velocity_knots": 464.0
+        },
+        {
+          "altitude_ft": 35649.0,
+          "altitude_m": 10865.7,
+          "callsign": "WJA5272",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 19.6,
+          "lat": 42.6309,
+          "lon": -112.3827,
+          "velocity_knots": 366.2
+        },
+        {
+          "altitude_ft": 35644.0,
+          "altitude_m": 10864.2,
+          "callsign": "SKW9803",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 33.0,
+          "lat": 39.7914,
+          "lon": -120.6707,
+          "velocity_knots": 187.4
+        },
+        {
+          "altitude_ft": 36761.0,
+          "altitude_m": 11204.8,
+          "callsign": "AAL2619",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 52.2,
+          "lat": 29.4048,
+          "lon": -69.0985,
+          "velocity_knots": 350.3
+        },
+        {
+          "altitude_ft": 35497.0,
+          "altitude_m": 10819.4,
+          "callsign": "UAL6399",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 338.6,
+          "lat": 47.7046,
+          "lon": -106.4262,
+          "velocity_knots": 381.6
+        },
+        {
+          "altitude_ft": 32113.0,
+          "altitude_m": 9787.9,
+          "callsign": "DAL1380",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 100.1,
+          "lat": 28.5625,
+          "lon": -95.0406,
+          "velocity_knots": 171.5
+        },
+        {
+          "altitude_ft": 34519.0,
+          "altitude_m": 10521.5,
+          "callsign": "SWA1280",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 147.2,
+          "lat": 32.3129,
+          "lon": -99.4653,
+          "velocity_knots": 284.8
+        },
+        {
+          "altitude_ft": 25541.0,
+          "altitude_m": 7784.9,
+          "callsign": "ASA3056",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 81.2,
+          "lat": 30.2231,
+          "lon": -90.6432,
+          "velocity_knots": 310.3
+        },
+        {
+          "altitude_ft": 34719.0,
+          "altitude_m": 10582.4,
+          "callsign": "JBU4241",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 113.8,
+          "lat": 38.739,
+          "lon": -91.8825,
+          "velocity_knots": 383.0
+        },
+        {
+          "altitude_ft": 34390.0,
+          "altitude_m": 10482.1,
+          "callsign": "FFT5310",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 265.2,
+          "lat": 43.8984,
+          "lon": -92.7971,
+          "velocity_knots": 326.0
+        },
+        {
+          "altitude_ft": 32804.0,
+          "altitude_m": 9998.7,
+          "callsign": "NKS3670",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 113.2,
+          "lat": 46.2737,
+          "lon": -72.3419,
+          "velocity_knots": 443.2
+        },
+        {
+          "altitude_ft": 6368.0,
+          "altitude_m": 1941.0,
+          "callsign": "WJA8697",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 101.0,
+          "lat": 45.0972,
+          "lon": -95.8222,
+          "velocity_knots": 139.4
+        },
+        {
+          "altitude_ft": 36140.0,
+          "altitude_m": 11015.6,
+          "callsign": "SKW8434",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 297.8,
+          "lat": 33.0191,
+          "lon": -113.4853,
+          "velocity_knots": 122.7
+        },
+        {
+          "altitude_ft": 16985.0,
+          "altitude_m": 5177.1,
+          "callsign": "AAL6717",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 345.0,
+          "lat": 45.5572,
+          "lon": -102.5256,
+          "velocity_knots": 265.6
+        },
+        {
+          "altitude_ft": 35315.0,
+          "altitude_m": 10764.0,
+          "callsign": "UAL1284",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 139.6,
+          "lat": 48.8911,
+          "lon": -80.5342,
+          "velocity_knots": 404.5
+        },
+        {
+          "altitude_ft": 32876.0,
+          "altitude_m": 10020.7,
+          "callsign": "DAL4720",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 301.1,
+          "lat": 40.3813,
+          "lon": -122.41,
+          "velocity_knots": 184.3
+        },
+        {
+          "altitude_ft": 39855.0,
+          "altitude_m": 12147.8,
+          "callsign": "SWA1720",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 161.4,
+          "lat": 48.7392,
+          "lon": -92.4217,
+          "velocity_knots": 174.4
+        },
+        {
+          "altitude_ft": 31507.0,
+          "altitude_m": 9603.2,
+          "callsign": "ASA4848",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 65.1,
+          "lat": 34.4217,
+          "lon": -118.5973,
+          "velocity_knots": 178.1
+        },
+        {
+          "altitude_ft": 29381.0,
+          "altitude_m": 8955.3,
+          "callsign": "JBU4745",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 211.1,
+          "lat": 46.7705,
+          "lon": -120.5443,
+          "velocity_knots": 316.7
+        },
+        {
+          "altitude_ft": 37654.0,
+          "altitude_m": 11476.9,
+          "callsign": "FFT8554",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 241.3,
+          "lat": 36.839,
+          "lon": -118.3737,
+          "velocity_knots": 381.6
+        },
+        {
+          "altitude_ft": 33093.0,
+          "altitude_m": 10086.7,
+          "callsign": "NKS6411",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 304.0,
+          "lat": 43.3097,
+          "lon": -119.804,
+          "velocity_knots": 254.9
+        },
+        {
+          "altitude_ft": 32572.0,
+          "altitude_m": 9927.9,
+          "callsign": "WJA4365",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 306.1,
+          "lat": 36.5817,
+          "lon": -80.7255,
+          "velocity_knots": 356.3
+        },
+        {
+          "altitude_ft": 26575.0,
+          "altitude_m": 8100.0,
+          "callsign": "SKW9103",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 330.2,
+          "lat": 33.1742,
+          "lon": -95.5651,
+          "velocity_knots": 279.4
+        },
+        {
+          "altitude_ft": 27874.0,
+          "altitude_m": 8496.0,
+          "callsign": "AAL2665",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 161.4,
+          "lat": 40.14,
+          "lon": -113.2371,
+          "velocity_knots": 495.3
+        },
+        {
+          "altitude_ft": 1368.0,
+          "altitude_m": 417.0,
+          "callsign": "UAL345",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 228.2,
+          "lat": 32.3808,
+          "lon": -90.0838,
+          "velocity_knots": 403.6
+        },
+        {
+          "altitude_ft": 36422.0,
+          "altitude_m": 11101.3,
+          "callsign": "DAL6543",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 346.8,
+          "lat": 48.5633,
+          "lon": -88.8803,
+          "velocity_knots": 410.8
+        },
+        {
+          "altitude_ft": 19627.0,
+          "altitude_m": 5982.4,
+          "callsign": "SWA9042",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 199.1,
+          "lat": 43.7681,
+          "lon": -75.3259,
+          "velocity_knots": 296.3
+        },
+        {
+          "altitude_ft": 29323.0,
+          "altitude_m": 8937.8,
+          "callsign": "ASA8231",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 124.7,
+          "lat": 40.6985,
+          "lon": -69.6602,
+          "velocity_knots": 422.8
+        },
+        {
+          "altitude_ft": 32345.0,
+          "altitude_m": 9858.9,
+          "callsign": "JBU7363",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 167.4,
+          "lat": 27.9729,
+          "lon": -120.7479,
+          "velocity_knots": 519.0
+        },
+        {
+          "altitude_ft": 26272.0,
+          "altitude_m": 8007.8,
+          "callsign": "FFT2296",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 332.9,
+          "lat": 48.47,
+          "lon": -100.3633,
+          "velocity_knots": 444.0
+        },
+        {
+          "altitude_ft": 25730.0,
+          "altitude_m": 7842.6,
+          "callsign": "NKS5598",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 243.1,
+          "lat": 44.742,
+          "lon": -120.9666,
+          "velocity_knots": 161.2
+        },
+        {
+          "altitude_ft": 36092.0,
+          "altitude_m": 11000.7,
+          "callsign": "WJA3994",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 84.4,
+          "lat": 42.1182,
+          "lon": -80.4454,
+          "velocity_knots": 136.7
+        },
+        {
+          "altitude_ft": 2532.0,
+          "altitude_m": 771.9,
+          "callsign": "SKW8027",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 10.7,
+          "lat": 39.9255,
+          "lon": -75.8031,
+          "velocity_knots": 393.1
+        },
+        {
+          "altitude_ft": 28565.0,
+          "altitude_m": 8706.6,
+          "callsign": "AAL4208",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 307.2,
+          "lat": 34.6325,
+          "lon": -73.7401,
+          "velocity_knots": 258.7
+        },
+        {
+          "altitude_ft": 29122.0,
+          "altitude_m": 8876.5,
+          "callsign": "UAL8541",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 67.5,
+          "lat": 32.1746,
+          "lon": -90.5324,
+          "velocity_knots": 478.6
+        },
+        {
+          "altitude_ft": 37112.0,
+          "altitude_m": 11311.6,
+          "callsign": "DAL5381",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 146.9,
+          "lat": 27.0355,
+          "lon": -104.194,
+          "velocity_knots": 237.6
+        },
+        {
+          "altitude_ft": 35513.0,
+          "altitude_m": 10824.4,
+          "callsign": "SWA9986",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 141.3,
+          "lat": 28.2837,
+          "lon": -91.382,
+          "velocity_knots": 359.6
+        },
+        {
+          "altitude_ft": 12258.0,
+          "altitude_m": 3736.1,
+          "callsign": "ASA915",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 6.4,
+          "lat": 46.9672,
+          "lon": -95.6696,
+          "velocity_knots": 199.1
+        },
+        {
+          "altitude_ft": 31306.0,
+          "altitude_m": 9542.0,
+          "callsign": "JBU764",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 270.7,
+          "lat": 35.8787,
+          "lon": -88.1003,
+          "velocity_knots": 508.2
+        },
+        {
+          "altitude_ft": 28527.0,
+          "altitude_m": 8694.9,
+          "callsign": "FFT5648",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 190.6,
+          "lat": 37.9806,
+          "lon": -107.3503,
+          "velocity_knots": 487.7
+        },
+        {
+          "altitude_ft": 29491.0,
+          "altitude_m": 8988.8,
+          "callsign": "NKS3320",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 116.1,
+          "lat": 42.8156,
+          "lon": -90.509,
+          "velocity_knots": 215.2
+        },
+        {
+          "altitude_ft": 33422.0,
+          "altitude_m": 10187.1,
+          "callsign": "WJA2580",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 157.8,
+          "lat": 28.7306,
+          "lon": -74.9127,
+          "velocity_knots": 436.6
+        },
+        {
+          "altitude_ft": 37219.0,
+          "altitude_m": 11344.5,
+          "callsign": "SKW7939",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 283.5,
+          "lat": 36.4302,
+          "lon": -68.2914,
+          "velocity_knots": 485.0
+        },
+        {
+          "altitude_ft": 18031.0,
+          "altitude_m": 5495.9,
+          "callsign": "AAL3257",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 155.9,
+          "lat": 29.4443,
+          "lon": -92.0806,
+          "velocity_knots": 326.0
+        },
+        {
+          "altitude_ft": 5746.0,
+          "altitude_m": 1751.4,
+          "callsign": "UAL9557",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 23.6,
+          "lat": 25.8602,
+          "lon": -70.2124,
+          "velocity_knots": 217.1
+        },
+        {
+          "altitude_ft": 25764.0,
+          "altitude_m": 7853.0,
+          "callsign": "DAL8533",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 21.8,
+          "lat": 35.9228,
+          "lon": -94.6152,
+          "velocity_knots": 273.5
+        },
+        {
+          "altitude_ft": 30912.0,
+          "altitude_m": 9421.9,
+          "callsign": "SWA1204",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 0.6,
+          "lat": 41.7566,
+          "lon": -111.6139,
+          "velocity_knots": 286.7
+        },
+        {
+          "altitude_ft": 2501.0,
+          "altitude_m": 762.3,
+          "callsign": "ASA2820",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 155.3,
+          "lat": 27.6897,
+          "lon": -75.5479,
+          "velocity_knots": 252.5
+        },
+        {
+          "altitude_ft": 29837.0,
+          "altitude_m": 9094.4,
+          "callsign": "JBU4945",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 172.8,
+          "lat": 43.7339,
+          "lon": -76.7338,
+          "velocity_knots": 215.6
+        },
+        {
+          "altitude_ft": 38956.0,
+          "altitude_m": 11873.7,
+          "callsign": "FFT4877",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 256.2,
+          "lat": 41.3982,
+          "lon": -110.4461,
+          "velocity_knots": 304.8
+        },
+        {
+          "altitude_ft": 23370.0,
+          "altitude_m": 7123.2,
+          "callsign": "NKS580",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 67.8,
+          "lat": 28.6109,
+          "lon": -120.3944,
+          "velocity_knots": 120.3
+        },
+        {
+          "altitude_ft": 28625.0,
+          "altitude_m": 8724.8,
+          "callsign": "WJA979",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 305.8,
+          "lat": 25.7508,
+          "lon": -116.9154,
+          "velocity_knots": 357.5
+        },
+        {
+          "altitude_ft": 27441.0,
+          "altitude_m": 8364.1,
+          "callsign": "SKW5734",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 308.0,
+          "lat": 25.1138,
+          "lon": -76.0647,
+          "velocity_knots": 432.2
+        },
+        {
+          "altitude_ft": 34052.0,
+          "altitude_m": 10378.9,
+          "callsign": "AAL9102",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 292.7,
+          "lat": 31.1023,
+          "lon": -72.4663,
+          "velocity_knots": 264.2
+        },
+        {
+          "altitude_ft": 28245.0,
+          "altitude_m": 8609.2,
+          "callsign": "UAL9847",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 114.3,
+          "lat": 32.6416,
+          "lon": -79.0433,
+          "velocity_knots": 285.6
+        },
+        {
+          "altitude_ft": 25285.0,
+          "altitude_m": 7707.0,
+          "callsign": "DAL7050",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 254.9,
+          "lat": 26.8746,
+          "lon": -121.3591,
+          "velocity_knots": 412.7
+        },
+        {
+          "altitude_ft": 33907.0,
+          "altitude_m": 10335.0,
+          "callsign": "SWA1738",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 51.7,
+          "lat": 42.7259,
+          "lon": -105.5566,
+          "velocity_knots": 168.2
+        },
+        {
+          "altitude_ft": 39877.0,
+          "altitude_m": 12154.4,
+          "callsign": "ASA2723",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 357.5,
+          "lat": 41.6343,
+          "lon": -113.4881,
+          "velocity_knots": 123.4
+        },
+        {
+          "altitude_ft": 38206.0,
+          "altitude_m": 11645.1,
+          "callsign": "JBU139",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 223.8,
+          "lat": 39.0313,
+          "lon": -116.02,
+          "velocity_knots": 335.5
+        },
+        {
+          "altitude_ft": 29421.0,
+          "altitude_m": 8967.6,
+          "callsign": "FFT3500",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 6.5,
+          "lat": 31.5565,
+          "lon": -120.2214,
+          "velocity_knots": 458.0
+        },
+        {
+          "altitude_ft": 28805.0,
+          "altitude_m": 8779.8,
+          "callsign": "NKS6669",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 199.3,
+          "lat": 39.2971,
+          "lon": -110.2796,
+          "velocity_knots": 366.1
+        },
+        {
+          "altitude_ft": 33504.0,
+          "altitude_m": 10212.0,
+          "callsign": "WJA2749",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 150.9,
+          "lat": 34.508,
+          "lon": -85.7309,
+          "velocity_knots": 518.1
+        },
+        {
+          "altitude_ft": 32803.0,
+          "altitude_m": 9998.5,
+          "callsign": "SKW7607",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 33.9,
+          "lat": 37.35,
+          "lon": -122.3142,
+          "velocity_knots": 283.2
+        },
+        {
+          "altitude_ft": 27240.0,
+          "altitude_m": 8302.9,
+          "callsign": "AAL3660",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 71.8,
+          "lat": 46.3518,
+          "lon": -101.2746,
+          "velocity_knots": 189.5
+        },
+        {
+          "altitude_ft": 32047.0,
+          "altitude_m": 9767.9,
+          "callsign": "UAL9618",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 316.2,
+          "lat": 45.6156,
+          "lon": -72.8079,
+          "velocity_knots": 416.0
+        },
+        {
+          "altitude_ft": 35967.0,
+          "altitude_m": 10962.8,
+          "callsign": "DAL5385",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 37.7,
+          "lat": 34.0973,
+          "lon": -94.5639,
+          "velocity_knots": 349.3
+        },
+        {
+          "altitude_ft": 26498.0,
+          "altitude_m": 8076.6,
+          "callsign": "SWA7850",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 267.7,
+          "lat": 46.6954,
+          "lon": -75.3935,
+          "velocity_knots": 200.0
+        },
+        {
+          "altitude_ft": 35790.0,
+          "altitude_m": 10908.7,
+          "callsign": "ASA9318",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 114.9,
+          "lat": 25.5554,
+          "lon": -69.1426,
+          "velocity_knots": 277.8
+        },
+        {
+          "altitude_ft": 34027.0,
+          "altitude_m": 10371.3,
+          "callsign": "JBU8886",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 168.4,
+          "lat": 39.6098,
+          "lon": -91.0456,
+          "velocity_knots": 498.4
+        },
+        {
+          "altitude_ft": 26967.0,
+          "altitude_m": 8219.4,
+          "callsign": "FFT3389",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 122.2,
+          "lat": 29.7218,
+          "lon": -102.2537,
+          "velocity_knots": 396.2
+        },
+        {
+          "altitude_ft": 3708.0,
+          "altitude_m": 1130.3,
+          "callsign": "NKS1712",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 100.1,
+          "lat": 47.9176,
+          "lon": -109.6022,
+          "velocity_knots": 476.3
+        },
+        {
+          "altitude_ft": 32026.0,
+          "altitude_m": 9761.6,
+          "callsign": "WJA4601",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 173.3,
+          "lat": 29.8501,
+          "lon": -112.7829,
+          "velocity_knots": 135.1
+        },
+        {
+          "altitude_ft": 26660.0,
+          "altitude_m": 8126.1,
+          "callsign": "SKW2668",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 106.1,
+          "lat": 48.024,
+          "lon": -87.1114,
+          "velocity_knots": 219.7
+        },
+        {
+          "altitude_ft": 39768.0,
+          "altitude_m": 12121.4,
+          "callsign": "AAL6177",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 25.9,
+          "lat": 43.3553,
+          "lon": -74.7809,
+          "velocity_knots": 505.6
+        },
+        {
+          "altitude_ft": 26455.0,
+          "altitude_m": 8063.4,
+          "callsign": "UAL9824",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 222.0,
+          "lat": 28.307,
+          "lon": -106.2543,
+          "velocity_knots": 461.9
+        },
+        {
+          "altitude_ft": 27405.0,
+          "altitude_m": 8352.9,
+          "callsign": "DAL1155",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 264.6,
+          "lat": 38.0167,
+          "lon": -113.9079,
+          "velocity_knots": 355.2
+        },
+        {
+          "altitude_ft": 36400.0,
+          "altitude_m": 11094.8,
+          "callsign": "SWA8533",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 74.5,
+          "lat": 32.1048,
+          "lon": -102.5811,
+          "velocity_knots": 432.0
+        },
+        {
+          "altitude_ft": 26506.0,
+          "altitude_m": 8079.0,
+          "callsign": "ASA3910",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 64.6,
+          "lat": 47.5969,
+          "lon": -116.364,
+          "velocity_knots": 462.3
+        },
+        {
+          "altitude_ft": 35654.0,
+          "altitude_m": 10867.2,
+          "callsign": "JBU2718",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 314.8,
+          "lat": 34.9256,
+          "lon": -98.2577,
+          "velocity_knots": 464.2
+        },
+        {
+          "altitude_ft": 28672.0,
+          "altitude_m": 8739.2,
+          "callsign": "FFT3031",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 319.7,
+          "lat": 33.1437,
+          "lon": -93.8032,
+          "velocity_knots": 500.4
+        },
+        {
+          "altitude_ft": 32946.0,
+          "altitude_m": 10042.0,
+          "callsign": "NKS1696",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 156.4,
+          "lat": 43.6566,
+          "lon": -94.5286,
+          "velocity_knots": 335.7
+        },
+        {
+          "altitude_ft": 32230.0,
+          "altitude_m": 9823.8,
+          "callsign": "WJA8358",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 199.6,
+          "lat": 28.1621,
+          "lon": -116.0885,
+          "velocity_knots": 183.5
+        },
+        {
+          "altitude_ft": 585.0,
+          "altitude_m": 178.4,
+          "callsign": "SKW9535",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 115.8,
+          "lat": 29.9852,
+          "lon": -109.0748,
+          "velocity_knots": 490.9
+        },
+        {
+          "altitude_ft": 32978.0,
+          "altitude_m": 10051.8,
+          "callsign": "AAL6637",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 294.6,
+          "lat": 39.5951,
+          "lon": -97.4242,
+          "velocity_knots": 520.2
+        },
+        {
+          "altitude_ft": 23407.0,
+          "altitude_m": 7134.5,
+          "callsign": "UAL1953",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 18.0,
+          "lat": 42.7988,
+          "lon": -97.2182,
+          "velocity_knots": 256.0
+        },
+        {
+          "altitude_ft": 36262.0,
+          "altitude_m": 11052.8,
+          "callsign": "DAL6408",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 332.6,
+          "lat": 33.2177,
+          "lon": -79.3049,
+          "velocity_knots": 203.1
+        },
+        {
+          "altitude_ft": 4889.0,
+          "altitude_m": 1490.1,
+          "callsign": "SWA7956",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 22.3,
+          "lat": 35.5118,
+          "lon": -87.8542,
+          "velocity_knots": 231.3
+        },
+        {
+          "altitude_ft": 17617.0,
+          "altitude_m": 5369.6,
+          "callsign": "ASA5017",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 114.9,
+          "lat": 35.9983,
+          "lon": -115.9033,
+          "velocity_knots": 493.0
+        },
+        {
+          "altitude_ft": 33995.0,
+          "altitude_m": 10361.8,
+          "callsign": "JBU3989",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 342.0,
+          "lat": 42.4283,
+          "lon": -97.6395,
+          "velocity_knots": 309.7
+        },
+        {
+          "altitude_ft": 37690.0,
+          "altitude_m": 11487.9,
+          "callsign": "FFT5877",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 321.3,
+          "lat": 33.2251,
+          "lon": -113.252,
+          "velocity_knots": 300.2
+        },
+        {
+          "altitude_ft": 34900.0,
+          "altitude_m": 10637.5,
+          "callsign": "NKS498",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 341.1,
+          "lat": 42.9908,
+          "lon": -68.4506,
+          "velocity_knots": 240.1
+        },
+        {
+          "altitude_ft": 33427.0,
+          "altitude_m": 10188.6,
+          "callsign": "WJA1580",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 326.6,
+          "lat": 33.7921,
+          "lon": -82.3819,
+          "velocity_knots": 324.5
+        },
+        {
+          "altitude_ft": 31122.0,
+          "altitude_m": 9486.1,
+          "callsign": "SKW7225",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 45.3,
+          "lat": 35.0632,
+          "lon": -87.4111,
+          "velocity_knots": 296.3
+        },
+        {
+          "altitude_ft": 34944.0,
+          "altitude_m": 10650.8,
+          "callsign": "AAL3119",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 71.2,
+          "lat": 27.2014,
+          "lon": -86.2881,
+          "velocity_knots": 250.0
+        },
+        {
+          "altitude_ft": 35018.0,
+          "altitude_m": 10673.4,
+          "callsign": "UAL295",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 99.1,
+          "lat": 43.6756,
+          "lon": -75.6653,
+          "velocity_knots": 169.5
+        },
+        {
+          "altitude_ft": 38655.0,
+          "altitude_m": 11782.0,
+          "callsign": "DAL7440",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 252.5,
+          "lat": 28.3277,
+          "lon": -107.4064,
+          "velocity_knots": 337.9
+        },
+        {
+          "altitude_ft": 34382.0,
+          "altitude_m": 10479.7,
+          "callsign": "SWA2104",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 351.4,
+          "lat": 47.8701,
+          "lon": -89.4467,
+          "velocity_knots": 247.5
+        },
+        {
+          "altitude_ft": 1969.0,
+          "altitude_m": 600.1,
+          "callsign": "ASA7037",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 159.8,
+          "lat": 34.5922,
+          "lon": -85.3015,
+          "velocity_knots": 365.7
+        },
+        {
+          "altitude_ft": 33168.0,
+          "altitude_m": 10109.7,
+          "callsign": "JBU8762",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 227.6,
+          "lat": 47.4625,
+          "lon": -76.0309,
+          "velocity_knots": 316.7
+        },
+        {
+          "altitude_ft": 38858.0,
+          "altitude_m": 11844.0,
+          "callsign": "FFT3228",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 268.2,
+          "lat": 33.0187,
+          "lon": -109.5687,
+          "velocity_knots": 515.9
+        },
+        {
+          "altitude_ft": 31847.0,
+          "altitude_m": 9706.9,
+          "callsign": "NKS8448",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 232.1,
+          "lat": 43.352,
+          "lon": -81.0575,
+          "velocity_knots": 214.6
+        },
+        {
+          "altitude_ft": 31150.0,
+          "altitude_m": 9494.4,
+          "callsign": "WJA2935",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 309.8,
+          "lat": 31.9437,
+          "lon": -108.8205,
+          "velocity_knots": 449.8
+        },
+        {
+          "altitude_ft": 36963.0,
+          "altitude_m": 11266.2,
+          "callsign": "SKW2266",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 49.8,
+          "lat": 29.0248,
+          "lon": -122.5871,
+          "velocity_knots": 459.2
+        },
+        {
+          "altitude_ft": 39979.0,
+          "altitude_m": 12185.6,
+          "callsign": "AAL2935",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 152.2,
+          "lat": 43.5841,
+          "lon": -116.6363,
+          "velocity_knots": 179.4
+        },
+        {
+          "altitude_ft": 26045.0,
+          "altitude_m": 7938.4,
+          "callsign": "UAL2006",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 284.7,
+          "lat": 39.872,
+          "lon": -71.6905,
+          "velocity_knots": 173.0
+        },
+        {
+          "altitude_ft": 26678.0,
+          "altitude_m": 8131.4,
+          "callsign": "DAL7136",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 152.5,
+          "lat": 31.4952,
+          "lon": -74.3333,
+          "velocity_knots": 188.6
+        },
+        {
+          "altitude_ft": 34790.0,
+          "altitude_m": 10604.1,
+          "callsign": "SWA8341",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 359.8,
+          "lat": 38.2524,
+          "lon": -95.4579,
+          "velocity_knots": 521.6
+        },
+        {
+          "altitude_ft": 39650.0,
+          "altitude_m": 12085.3,
+          "callsign": "ASA3272",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 152.9,
+          "lat": 37.395,
+          "lon": -117.7641,
+          "velocity_knots": 305.0
+        },
+        {
+          "altitude_ft": 36812.0,
+          "altitude_m": 11220.3,
+          "callsign": "JBU3251",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 295.6,
+          "lat": 26.2341,
+          "lon": -86.0255,
+          "velocity_knots": 456.3
+        },
+        {
+          "altitude_ft": 37021.0,
+          "altitude_m": 11284.0,
+          "callsign": "FFT1757",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 51.8,
+          "lat": 35.0,
+          "lon": -105.315,
+          "velocity_knots": 481.1
+        },
+        {
+          "altitude_ft": 15640.0,
+          "altitude_m": 4767.1,
+          "callsign": "NKS4962",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 19.0,
+          "lat": 46.0977,
+          "lon": -117.7148,
+          "velocity_knots": 144.2
+        },
+        {
+          "altitude_ft": 25523.0,
+          "altitude_m": 7779.3,
+          "callsign": "WJA3446",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 60.5,
+          "lat": 25.0124,
+          "lon": -99.0026,
+          "velocity_knots": 452.8
+        },
+        {
+          "altitude_ft": 33084.0,
+          "altitude_m": 10084.0,
+          "callsign": "SKW6556",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 33.4,
+          "lat": 28.5247,
+          "lon": -75.6559,
+          "velocity_knots": 451.0
+        },
+        {
+          "altitude_ft": 36285.0,
+          "altitude_m": 11059.6,
+          "callsign": "AAL2094",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 167.3,
+          "lat": 34.4676,
+          "lon": -82.4211,
+          "velocity_knots": 423.0
+        },
+        {
+          "altitude_ft": 36272.0,
+          "altitude_m": 11055.8,
+          "callsign": "UAL5090",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 31.0,
+          "lat": 33.8297,
+          "lon": -110.9446,
+          "velocity_knots": 165.2
+        },
+        {
+          "altitude_ft": 30978.0,
+          "altitude_m": 9442.0,
+          "callsign": "DAL7021",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 235.3,
+          "lat": 29.231,
+          "lon": -113.3559,
+          "velocity_knots": 172.6
+        },
+        {
+          "altitude_ft": 39634.0,
+          "altitude_m": 12080.4,
+          "callsign": "SWA9903",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 69.2,
+          "lat": 35.7695,
+          "lon": -101.3895,
+          "velocity_knots": 473.0
+        },
+        {
+          "altitude_ft": 36021.0,
+          "altitude_m": 10979.2,
+          "callsign": "ASA163",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 298.3,
+          "lat": 30.2992,
+          "lon": -86.9159,
+          "velocity_knots": 341.6
+        },
+        {
+          "altitude_ft": 2960.0,
+          "altitude_m": 902.3,
+          "callsign": "JBU5706",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 93.7,
+          "lat": 42.0528,
+          "lon": -121.5382,
+          "velocity_knots": 315.1
+        },
+        {
+          "altitude_ft": 33418.0,
+          "altitude_m": 10185.9,
+          "callsign": "FFT1661",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 187.9,
+          "lat": 35.0477,
+          "lon": -81.3149,
+          "velocity_knots": 227.1
+        },
+        {
+          "altitude_ft": 25991.0,
+          "altitude_m": 7922.1,
+          "callsign": "NKS3914",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 76.4,
+          "lat": 32.554,
+          "lon": -91.9748,
+          "velocity_knots": 117.0
+        },
+        {
+          "altitude_ft": 22797.0,
+          "altitude_m": 6948.4,
+          "callsign": "WJA1040",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 336.8,
+          "lat": 46.4683,
+          "lon": -87.454,
+          "velocity_knots": 311.0
+        },
+        {
+          "altitude_ft": 27932.0,
+          "altitude_m": 8513.8,
+          "callsign": "SKW4752",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 77.1,
+          "lat": 26.4277,
+          "lon": -111.1652,
+          "velocity_knots": 394.0
+        },
+        {
+          "altitude_ft": 27642.0,
+          "altitude_m": 8425.3,
+          "callsign": "AAL870",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 115.3,
+          "lat": 27.3798,
+          "lon": -111.6158,
+          "velocity_knots": 467.9
+        },
+        {
+          "altitude_ft": 28972.0,
+          "altitude_m": 8830.7,
+          "callsign": "UAL1433",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 73.9,
+          "lat": 33.6582,
+          "lon": -119.9601,
+          "velocity_knots": 365.9
+        },
+        {
+          "altitude_ft": 529.0,
+          "altitude_m": 161.1,
+          "callsign": "DAL603",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 43.9,
+          "lat": 46.3208,
+          "lon": -71.8683,
+          "velocity_knots": 369.6
+        },
+        {
+          "altitude_ft": 32891.0,
+          "altitude_m": 10025.1,
+          "callsign": "SWA1241",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 15.9,
+          "lat": 45.4572,
+          "lon": -81.5151,
+          "velocity_knots": 523.5
+        },
+        {
+          "altitude_ft": 33653.0,
+          "altitude_m": 10257.4,
+          "callsign": "ASA9165",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 352.3,
+          "lat": 34.6304,
+          "lon": -105.1835,
+          "velocity_knots": 186.2
+        },
+        {
+          "altitude_ft": 30711.0,
+          "altitude_m": 9360.7,
+          "callsign": "JBU8080",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 210.5,
+          "lat": 36.9673,
+          "lon": -95.848,
+          "velocity_knots": 279.0
+        },
+        {
+          "altitude_ft": 6995.0,
+          "altitude_m": 2132.1,
+          "callsign": "FFT8004",
+          "color": [
+            255,
+            215,
+            0,
+            200
+          ],
+          "heading": 129.1,
+          "lat": 28.0733,
+          "lon": -105.3403,
+          "velocity_knots": 357.3
+        },
+        {
+          "altitude_ft": 38902.0,
+          "altitude_m": 11857.2,
+          "callsign": "NKS8673",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 140.9,
+          "lat": 34.8081,
+          "lon": -99.2665,
+          "velocity_knots": 497.5
+        },
+        {
+          "altitude_ft": 31927.0,
+          "altitude_m": 9731.4,
+          "callsign": "WJA2982",
+          "color": [
+            255,
+            69,
+            0,
+            220
+          ],
+          "heading": 115.5,
+          "lat": 32.9023,
+          "lon": -98.1924,
+          "velocity_knots": 342.9
+        },
+        {
+          "altitude_ft": 817.0,
+          "altitude_m": 249.1,
+          "callsign": "SKW6621",
+          "color": [
+            30,
+            144,
+            255,
+            200
+          ],
+          "heading": 140.1,
+          "lat": 33.2975,
+          "lon": -102.1774,
+          "velocity_knots": 411.9
+        }
+      ],
+      "filled": true,
+      "getColor": "@@=color",
+      "getPosition": "@@=[lon, lat]",
+      "getRadius": 15000,
+      "id": "6b609219-181e-41c0-8f18-f39341d1739b",
+      "opacity": 0.85,
+      "pickable": true,
+      "radiusMaxPixels": 12,
+      "radiusMinPixels": 3,
+      "radiusScale": 1,
+      "stroked": false
+    },
+    {
+      "@@type": "ArcLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "destination": [
+            -118.4081,
+            33.9425
+          ],
+          "from_name": "JFK",
+          "origin": [
+            -73.7781,
+            40.6413
+          ],
+          "to_name": "LAX",
+          "width": 3
+        },
+        {
+          "destination": [
+            -122.379,
+            37.6213
+          ],
+          "from_name": "JFK",
+          "origin": [
+            -73.7781,
+            40.6413
+          ],
+          "to_name": "SFO",
+          "width": 3
+        },
+        {
+          "destination": [
+            -84.4277,
+            33.6407
+          ],
+          "from_name": "ORD",
+          "origin": [
+            -87.9073,
+            41.9742
+          ],
+          "to_name": "ATL",
+          "width": 3
+        },
+        {
+          "destination": [
+            -122.379,
+            37.6213
+          ],
+          "from_name": "LAX",
+          "origin": [
+            -118.4081,
+            33.9425
+          ],
+          "to_name": "SFO",
+          "width": 3
+        },
+        {
+          "destination": [
+            -84.4277,
+            33.6407
+          ],
+          "from_name": "DFW",
+          "origin": [
+            -97.0403,
+            32.8998
+          ],
+          "to_name": "ATL",
+          "width": 3
+        },
+        {
+          "destination": [
+            -80.287,
+            25.7959
+          ],
+          "from_name": "JFK",
+          "origin": [
+            -73.7781,
+            40.6413
+          ],
+          "to_name": "MIA",
+          "width": 3
+        },
+        {
+          "destination": [
+            -97.0403,
+            32.8998
+          ],
+          "from_name": "ORD",
+          "origin": [
+            -87.9073,
+            41.9742
+          ],
+          "to_name": "DFW",
+          "width": 3
+        },
+        {
+          "destination": [
+            -104.6737,
+            39.8561
+          ],
+          "from_name": "LAX",
+          "origin": [
+            -118.4081,
+            33.9425
+          ],
+          "to_name": "DEN",
+          "width": 3
+        },
+        {
+          "destination": [
+            -73.7781,
+            40.6413
+          ],
+          "from_name": "BOS",
+          "origin": [
+            -71.0096,
+            42.3656
+          ],
+          "to_name": "JFK",
+          "width": 3
+        },
+        {
+          "destination": [
+            -80.287,
+            25.7959
+          ],
+          "from_name": "ATL",
+          "origin": [
+            -84.4277,
+            33.6407
+          ],
+          "to_name": "MIA",
+          "width": 3
+        },
+        {
+          "destination": [
+            -122.379,
+            37.6213
+          ],
+          "from_name": "SEA",
+          "origin": [
+            -122.3088,
+            47.4502
+          ],
+          "to_name": "SFO",
+          "width": 3
+        },
+        {
+          "destination": [
+            -71.0096,
+            42.3656
+          ],
+          "from_name": "ORD",
+          "origin": [
+            -87.9073,
+            41.9742
+          ],
+          "to_name": "BOS",
+          "width": 3
+        },
+        {
+          "destination": [
+            -87.9073,
+            41.9742
+          ],
+          "from_name": "DEN",
+          "origin": [
+            -104.6737,
+            39.8561
+          ],
+          "to_name": "ORD",
+          "width": 3
+        },
+        {
+          "destination": [
+            -118.4081,
+            33.9425
+          ],
+          "from_name": "DFW",
+          "origin": [
+            -97.0403,
+            32.8998
+          ],
+          "to_name": "LAX",
+          "width": 3
+        },
+        {
+          "destination": [
+            -97.0403,
+            32.8998
+          ],
+          "from_name": "ATL",
+          "origin": [
+            -84.4277,
+            33.6407
+          ],
+          "to_name": "DFW",
+          "width": 3
+        },
+        {
+          "destination": [
+            -87.9073,
+            41.9742
+          ],
+          "from_name": "JFK",
+          "origin": [
+            -73.7781,
+            40.6413
+          ],
+          "to_name": "ORD",
+          "width": 3
+        },
+        {
+          "destination": [
+            -112.0078,
+            33.4373
+          ],
+          "from_name": "LAX",
+          "origin": [
+            -118.4081,
+            33.9425
+          ],
+          "to_name": "PHX",
+          "width": 3
+        },
+        {
+          "destination": [
+            -122.3088,
+            47.4502
+          ],
+          "from_name": "SFO",
+          "origin": [
+            -122.379,
+            37.6213
+          ],
+          "to_name": "SEA",
+          "width": 3
+        },
+        {
+          "destination": [
+            -80.9473,
+            35.2144
+          ],
+          "from_name": "ATL",
+          "origin": [
+            -84.4277,
+            33.6407
+          ],
+          "to_name": "CLT",
+          "width": 3
+        },
+        {
+          "destination": [
+            -95.3368,
+            29.9902
+          ],
+          "from_name": "DFW",
+          "origin": [
+            -97.0403,
+            32.8998
+          ],
+          "to_name": "IAH",
+          "width": 3
+        }
+      ],
+      "getSourceColor": [
+        0,
+        200,
+        255,
+        160
+      ],
+      "getSourcePosition": "@@=origin",
+      "getTargetColor": [
+        255,
+        100,
+        0,
+        160
+      ],
+      "getTargetPosition": "@@=destination",
+      "getWidth": "@@=width",
+      "id": "ed71dff0-6583-496e-9d6b-56030a3b3b95",
+      "pickable": true
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "parameters": {
+    "clearColor": [
+      0.05,
+      0.07,
+      0.09,
+      1.0
+    ]
+  },
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{callsign}</b><br/>Alt: {altitude_ft} ft<br/>Speed: {velocity_knots} kts<br/>Hdg: {heading}°', 'style': {'background': '#0d1117', 'color': '#e6edf3', 'font-family': 'monospace', 'padding': '8px', 'border-radius': '6px'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

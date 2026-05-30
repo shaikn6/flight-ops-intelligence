@@ -27,3 +27,15 @@ httpx>=0.27
 
 # Utilities
 python-dotenv==1.0.1
+
+# ── V2 additions ──────────────────────────────────────────────────────────────
+
+# Live ADS-B
+requests>=2.31
+
+# 3D Globe visualization
+pydeck>=0.8.0
+
+# Big-data analytics
+duckdb>=0.10.0
+pyarrow>=14.0
