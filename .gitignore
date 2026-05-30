@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+.env
+.venv/
+venv/
+*.log
+.DS_Store
+data/flight_ops.db
+# Keep generated artifacts — they're part of the portfolio demo
+# data/flights.csv — keep
+# models/delay_rf.pkl — keep
+# maps/flight_map.html — keep
+# docs/screenshots/*.png — keep

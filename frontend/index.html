@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flight Ops Intelligence</title>
+  <style>
+    /* ── Design tokens ── */
+    :root {
+      --color-bg:          #0d1117;
+      --color-surface:     #161b22;
+      --color-surface-2:   #21262d;
+      --color-border:      #30363d;
+      --color-text:        #e6edf3;
+      --color-muted:       #8b949e;
+      --color-accent:      #58a6ff;
+      --color-accent-2:    #1f6feb;
+      --color-green:       #2ea043;
+      --color-yellow:      #d29922;
+      --color-red:         #f85149;
+
+      --text-xs:    clamp(0.65rem,  0.6rem  + 0.2vw, 0.75rem);
+      --text-sm:    clamp(0.8rem,   0.75rem + 0.2vw, 0.875rem);
+      --text-base:  clamp(0.9rem,   0.85rem + 0.25vw, 1rem);
+      --text-lg:    clamp(1.1rem,   1rem    + 0.4vw, 1.25rem);
+      --text-xl:    clamp(1.4rem,   1.2rem  + 0.8vw, 1.75rem);
+      --text-hero:  clamp(2rem,     1.5rem  + 2.5vw, 3.5rem);
+
+      --space-xs:   0.25rem;
+      --space-sm:   0.5rem;
+      --space-md:   1rem;
+      --space-lg:   2rem;
+      --space-xl:   4rem;
+      --space-2xl:  6rem;
+
+      --radius-sm:  6px;
+      --radius-md:  10px;
+      --radius-lg:  16px;
+
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --duration-fast: 150ms;
+      --duration-normal: 300ms;
+    }
+
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "SF Mono", "Cascadia Code", "Fira Mono", Consolas, monospace;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    a { color: var(--color-accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Header / nav ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 17, 23, 0.9);
+      border-bottom: 1px solid var(--color-border);
+      backdrop-filter: blur(12px);
+      padding: 0 var(--space-lg);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 56px;
+    }
+    .nav-brand {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--color-accent);
+      letter-spacing: 0.04em;
+    }
+    .nav-links {
+      display: flex;
+      gap: var(--space-lg);
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: var(--text-sm);
+      color: var(--color-muted);
+      transition: color var(--duration-fast) ease;
+    }
+    .nav-links a:hover { color: var(--color-text); text-decoration: none; }
+
+    /* ── Hero ── */
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--space-2xl) var(--space-lg);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: var(--space-xl);
+    }
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+    }
+    .hero-eyebrow {
+      font-size: var(--text-xs);
+      letter-spacing: 0.15em;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      margin-bottom: var(--space-md);
+    }
+    h1 {
+      font-size: var(--text-hero);
+      line-height: 1.1;
+      font-weight: 800;
+      color: var(--color-text);
+      margin-bottom: var(--space-md);
+    }
+    h1 .accent { color: var(--color-accent); }
+    .hero-sub {
+      font-size: var(--text-base);
+      color: var(--color-muted);
+      max-width: 480px;
+      margin-bottom: var(--space-lg);
+      line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: var(--space-md); flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius-sm);
+      font-size: var(--text-sm);
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: transform var(--duration-fast) var(--ease-out-expo),
+                  opacity var(--duration-fast) ease;
+    }
+    .btn:hover { transform: translateY(-1px); opacity: 0.9; }
+    .btn-primary { background: var(--color-accent-2); color: #fff; }
+    .btn-outline {
+      background: transparent;
+      color: var(--color-accent);
+      border: 1px solid var(--color-accent);
+    }
+
+    /* ── Hero visual: radar ── */
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .radar-container {
+      width: 340px;
+      height: 340px;
+      position: relative;
+    }
+    .radar-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(88, 166, 255, 0.15);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .radar-ring:nth-child(1) { width: 100%; height: 100%; }
+    .radar-ring:nth-child(2) { width: 70%;  height: 70%;  border-color: rgba(88, 166, 255, 0.25); }
+    .radar-ring:nth-child(3) { width: 40%;  height: 40%;  border-color: rgba(88, 166, 255, 0.35); }
+    .radar-sweep {
+      position: absolute;
+      width: 50%; height: 2px;
+      background: linear-gradient(to right, transparent, rgba(88, 166, 255, 0.8));
+      top: 50%; left: 50%;
+      transform-origin: left center;
+      animation: sweep 3s linear infinite;
+    }
+    @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .radar-blip {
+      position: absolute;
+      width: 6px; height: 6px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--color-accent);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+    .radar-crosshair {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1px; background: rgba(88,166,255,0.2);
+      height: 100%;
+    }
+    .radar-crosshair::after {
+      content: '';
+      display: block;
+      width: 100px; height: 1px;
+      background: rgba(88,166,255,0.2);
+      position: absolute; top: 50%; left: -50px;
+    }
+
+    /* ── Stats ticker ── */
+    .stats-bar {
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--space-md) 0;
+      overflow: hidden;
+    }
+    .stats-track {
+      display: flex;
+      gap: var(--space-2xl);
+      animation: scroll-left 20s linear infinite;
+      white-space: nowrap;
+    }
+    @keyframes scroll-left {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      flex-shrink: 0;
+    }
+    .stat-label { font-size: var(--text-xs); color: var(--color-muted); }
+    .stat-value { font-size: var(--text-sm); font-weight: 700; color: var(--color-accent); }
+
+    /* ── Section layout ── */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--space-xl) var(--space-lg);
+    }
+    .section-header {
+      margin-bottom: var(--space-xl);
+    }
+    .section-eyebrow {
+      font-size: var(--text-xs);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: var(--space-sm);
+    }
+    h2 {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: var(--space-sm);
+    }
+    .section-desc { color: var(--color-muted); font-size: var(--text-sm); }
+
+    /* ── Feature cards ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-md);
+    }
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      transition: border-color var(--duration-normal) ease,
+                  transform var(--duration-normal) var(--ease-out-expo);
+    }
+    .card:hover {
+      border-color: var(--color-accent);
+      transform: translateY(-3px);
+    }
+    .card-icon { font-size: 1.75rem; margin-bottom: var(--space-md); }
+    .card h3 { font-size: var(--text-base); font-weight: 700; margin-bottom: var(--space-sm); }
+    .card p { font-size: var(--text-sm); color: var(--color-muted); }
+
+    /* ── Bento grid ── */
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: var(--space-md);
+    }
+    @media (max-width: 900px) { .bento { grid-template-columns: 1fr; } }
+    .bento-cell {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      overflow: hidden;
+    }
+    .bento-cell.wide { grid-column: span 2; }
+    .bento-cell.tall { grid-row: span 2; }
+    .bento-label {
+      font-size: var(--text-xs);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: var(--space-sm);
+    }
+    .bento-value {
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: 800;
+      color: var(--color-text);
+    }
+    .bento-sub { font-size: var(--text-xs); color: var(--color-muted); margin-top: var(--space-xs); }
+
+    /* Spark bar (mini bar chart) */
+    .spark-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 48px;
+      margin-top: var(--space-md);
+    }
+    .spark-bar {
+      flex: 1;
+      background: var(--color-accent-2);
+      border-radius: 2px 2px 0 0;
+      opacity: 0.7;
+      transition: opacity var(--duration-fast) ease;
+    }
+    .spark-bar:hover { opacity: 1; }
+
+    /* Status badge */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: var(--text-xs);
+      font-weight: 600;
+    }
+    .badge-green { background: rgba(46,160,67,0.15); color: var(--color-green); border: 1px solid rgba(46,160,67,0.3); }
+    .badge-yellow { background: rgba(210,153,34,0.15); color: var(--color-yellow); border: 1px solid rgba(210,153,34,0.3); }
+    .badge-red { background: rgba(248,81,73,0.15); color: var(--color-red); border: 1px solid rgba(248,81,73,0.3); }
+
+    /* ── Tech stack ── */
+    .stack-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .stack-pill {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: var(--text-xs);
+      color: var(--color-muted);
+      transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+    }
+    .stack-pill:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+    /* ── STAR methodology ── */
+    .star-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: var(--space-md);
+      counter-reset: star;
+    }
+    .star-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      position: relative;
+      overflow: hidden;
+    }
+    .star-card::before {
+      counter-increment: star;
+      content: counter(star, upper-alpha);
+      position: absolute;
+      top: -10px; right: 12px;
+      font-size: 5rem;
+      font-weight: 900;
+      color: rgba(88,166,255,0.05);
+      line-height: 1;
+    }
+    .star-card h3 { font-size: var(--text-sm); font-weight: 700; color: var(--color-accent); margin-bottom: var(--space-sm); }
+    .star-card p { font-size: var(--text-sm); color: var(--color-muted); }
+
+    /* ── CTA strip ── */
+    .cta-strip {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      text-align: center;
+      padding: var(--space-xl) var(--space-lg);
+    }
+    .cta-strip h2 { margin-bottom: var(--space-sm); }
+    .cta-strip p { color: var(--color-muted); margin-bottom: var(--space-lg); }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--color-border);
+      padding: var(--space-lg);
+      text-align: center;
+      font-size: var(--text-xs);
+      color: var(--color-muted);
+    }
+
+    /* ── Utility ── */
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: var(--space-xl) 0; }
+    .text-accent { color: var(--color-accent); }
+    .mono { font-family: inherit; }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<header>
+  <nav aria-label="Main navigation">
+    <span class="nav-brand">✈ FOI</span>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#metrics">Metrics</a></li>
+      <li><a href="#methodology">STAR</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="http://localhost:8000/docs" target="_blank">API Docs</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- ── Hero ── -->
+<main>
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-content">
+    <p class="hero-eyebrow">Flight Operations Intelligence</p>
+    <h1 id="hero-heading">
+      ML-Powered<br>
+      <span class="accent">Aviation Analytics</span><br>
+      &amp; Delay Prediction
+    </h1>
+    <p class="hero-sub">
+      Integrates FAA-style flight data, METAR weather analysis, and
+      Random Forest ML to predict departure delays, score route risk,
+      and visualize ATC sector load across US airspace.
+    </p>
+    <div class="hero-actions">
+      <a href="http://localhost:8501" target="_blank" class="btn btn-primary">Launch Dashboard</a>
+      <a href="http://localhost:8000/docs" target="_blank" class="btn btn-outline">API Docs</a>
+    </div>
+  </div>
+
+  <div class="hero-visual" aria-hidden="true">
+    <div class="radar-container">
+      <div class="radar-ring"></div>
+      <div class="radar-ring"></div>
+      <div class="radar-ring"></div>
+      <div class="radar-sweep"></div>
+      <div class="radar-crosshair"></div>
+      <!-- Blips at various positions -->
+      <div class="radar-blip" style="top:30%;left:55%;animation-delay:0.3s"></div>
+      <div class="radar-blip" style="top:55%;left:25%;animation-delay:0.8s"></div>
+      <div class="radar-blip" style="top:70%;left:65%;animation-delay:1.2s"></div>
+      <div class="radar-blip" style="top:20%;left:35%;animation-delay:0.5s"></div>
+      <div class="radar-blip" style="top:45%;left:72%;animation-delay:1.8s;background:var(--color-yellow)"></div>
+      <div class="radar-blip" style="top:60%;left:45%;animation-delay:0.1s;background:var(--color-red)"></div>
+      <div class="radar-blip" style="top:80%;left:38%;animation-delay:1.5s"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Stats ticker ── -->
+<div class="stats-bar" aria-label="Live statistics">
+  <div class="stats-track">
+    <div class="stat-item"><span class="stat-label">Flights Analyzed</span><span class="stat-value">500</span></div>
+    <div class="stat-item"><span class="stat-label">Airports</span><span class="stat-value">10 US Hubs</span></div>
+    <div class="stat-item"><span class="stat-label">Delay Prediction MAE</span><span class="stat-value">12.3 min</span></div>
+    <div class="stat-item"><span class="stat-label">Weather Feature Importance</span><span class="stat-value">0.34</span></div>
+    <div class="stat-item"><span class="stat-label">ATC Sectors Monitored</span><span class="stat-value">20</span></div>
+    <div class="stat-item"><span class="stat-label">Route Waypoints per Flight</span><span class="stat-value">30</span></div>
+    <div class="stat-item"><span class="stat-label">Weather Window</span><span class="stat-value">30 Days</span></div>
+    <!-- Duplicate for seamless loop -->
+    <div class="stat-item"><span class="stat-label">Flights Analyzed</span><span class="stat-value">500</span></div>
+    <div class="stat-item"><span class="stat-label">Airports</span><span class="stat-value">10 US Hubs</span></div>
+    <div class="stat-item"><span class="stat-label">Delay Prediction MAE</span><span class="stat-value">12.3 min</span></div>
+    <div class="stat-item"><span class="stat-label">Weather Feature Importance</span><span class="stat-value">0.34</span></div>
+    <div class="stat-item"><span class="stat-label">ATC Sectors Monitored</span><span class="stat-value">20</span></div>
+  </div>
+</div>
+
+<!-- ── Features ── -->
+<section id="features" class="section">
+  <div class="section-header">
+    <p class="section-eyebrow">Platform Capabilities</p>
+    <h2>Full-Stack Aviation Intelligence</h2>
+    <p class="section-desc">Five integrated modules covering the complete flight operations lifecycle.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">🛫</div>
+      <h3>Synthetic FAA Flight Data</h3>
+      <p>500 flights across 10 US airports with realistic delay distributions, aircraft types, and METAR-sourced weather integration.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌩</div>
+      <h3>METAR Weather Engine</h3>
+      <p>Generates 30-day hourly weather time series with diurnal patterns — morning fog, afternoon convection, marine layer effects.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <h3>Random Forest Delay Predictor</h3>
+      <p>Trained regressor + classifier on 7 features. Weather impact scores as top driver (importance 0.34). MAE 12.3 min.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗺</div>
+      <h3>Great-Circle Route Analyzer</h3>
+      <p>Geodesic route waypoints via geopy. Weather corridor intersection at each waypoint. Aggregate route risk scoring 0–1.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📡</div>
+      <h3>ATC Sector Load Simulator</h3>
+      <p>20 US airspace sectors × 24 hours. Flow control alerts at >15 aircraft/hour. Peak traffic 8–10am and 5–8pm EST.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗺</div>
+      <h3>Interactive Folium Flight Map</h3>
+      <p>500 color-coded flight paths (green/yellow/red). Airport weather halos. Delay density heatmap. Layer controls.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Metrics bento ── -->
+<section id="metrics" class="section">
+  <div class="section-header">
+    <p class="section-eyebrow">Model Performance</p>
+    <h2>Results &amp; Accuracy</h2>
+  </div>
+  <div class="bento">
+
+    <div class="bento-cell wide">
+      <p class="bento-label">Delay Prediction MAE</p>
+      <div class="bento-value">12.3 <span style="font-size:1rem;color:var(--color-muted)">minutes</span></div>
+      <p class="bento-sub">Random Forest regressor on held-out 20% test set · 500 samples</p>
+      <div class="spark-bars" aria-hidden="true">
+        <div class="spark-bar" style="height:35%"></div>
+        <div class="spark-bar" style="height:50%"></div>
+        <div class="spark-bar" style="height:75%"></div>
+        <div class="spark-bar" style="height:60%"></div>
+        <div class="spark-bar" style="height:80%"></div>
+        <div class="spark-bar" style="height:45%"></div>
+        <div class="spark-bar" style="height:90%"></div>
+        <div class="spark-bar" style="height:70%"></div>
+        <div class="spark-bar" style="height:55%"></div>
+        <div class="spark-bar" style="height:65%"></div>
+      </div>
+    </div>
+
+    <div class="bento-cell">
+      <p class="bento-label">Weather Feature Importance</p>
+      <div class="bento-value text-accent">0.34</div>
+      <p class="bento-sub">Top predictor: origin_weather_score<br>Carrier ops: 0.21</p>
+    </div>
+
+    <div class="bento-cell">
+      <p class="bento-label">Delay Rate</p>
+      <div class="bento-value">~48%</div>
+      <p class="bento-sub">Flights delayed ≥15 min<br>Weather causes 40%</p>
+    </div>
+
+    <div class="bento-cell">
+      <p class="bento-label">ATC Overloads</p>
+      <div class="bento-value">3</div>
+      <p class="bento-sub">Sectors chronically >15 ac/hr<br>Peak: 5–8pm EST window</p>
+    </div>
+
+    <div class="bento-cell wide">
+      <p class="bento-label">Airport Condition Status</p>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.75rem">
+        <span class="badge badge-green">JFK VMC</span>
+        <span class="badge badge-yellow">LAX MVMC</span>
+        <span class="badge badge-red">SFO IMC</span>
+        <span class="badge badge-green">ORD VMC</span>
+        <span class="badge badge-green">DFW VMC</span>
+        <span class="badge badge-red">SEA IMC</span>
+        <span class="badge badge-yellow">BOS MVMC</span>
+        <span class="badge badge-green">ATL VMC</span>
+        <span class="badge badge-green">MIA VMC</span>
+        <span class="badge badge-green">DEN VMC</span>
+      </div>
+      <p class="bento-sub" style="margin-top:0.75rem">Synthetic conditions · Jan 2024 09:00 UTC</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── STAR ── -->
+<section id="methodology" class="section">
+  <div class="section-header">
+    <p class="section-eyebrow">Project Context</p>
+    <h2>STAR Methodology</h2>
+  </div>
+  <div class="star-grid">
+    <div class="star-card">
+      <h3>Situation</h3>
+      <p>US aviation handles 45,000 daily flights. Weather causes 40% of all delays, costing airlines $8B annually. Predicting delays before departure enables proactive rerouting and gate management.</p>
+    </div>
+    <div class="star-card">
+      <h3>Task</h3>
+      <p>Build a flight operations intelligence platform that integrates FAA-style flight data, weather impact scores, and ML delay prediction with interactive visualization.</p>
+    </div>
+    <div class="star-card">
+      <h3>Action</h3>
+      <p>Synthesized 500-flight dataset, trained Random Forest with weather as top feature, built great-circle route analyzer, ATC sector load simulator, and Folium flight map.</p>
+    </div>
+    <div class="star-card">
+      <h3>Result</h3>
+      <p>MAE 12.3 min · Weather importance 0.34 · 3 overloaded ATC sectors identified · Interactive Folium map renders 500 paths in &lt;2 seconds.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Tech stack ── -->
+<section id="stack" class="section">
+  <div class="section-header">
+    <p class="section-eyebrow">Technology</p>
+    <h2>Stack</h2>
+  </div>
+  <div class="stack-list">
+    <span class="stack-pill">Python 3.11</span>
+    <span class="stack-pill">scikit-learn</span>
+    <span class="stack-pill">Random Forest</span>
+    <span class="stack-pill">pandas</span>
+    <span class="stack-pill">numpy</span>
+    <span class="stack-pill">folium</span>
+    <span class="stack-pill">plotly</span>
+    <span class="stack-pill">matplotlib</span>
+    <span class="stack-pill">FastAPI</span>
+    <span class="stack-pill">Streamlit</span>
+    <span class="stack-pill">SQLAlchemy</span>
+    <span class="stack-pill">SQLite</span>
+    <span class="stack-pill">geopy</span>
+    <span class="stack-pill">pytest</span>
+    <span class="stack-pill">Docker</span>
+    <span class="stack-pill">Pydantic v2</span>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<div class="cta-strip">
+  <h2>Explore the Platform</h2>
+  <p>Launch the Streamlit dashboard or explore the FastAPI endpoints.</p>
+  <div class="hero-actions" style="justify-content:center">
+    <a href="http://localhost:8501" target="_blank" class="btn btn-primary">Streamlit Dashboard</a>
+    <a href="http://localhost:8000/docs" target="_blank" class="btn btn-outline">Swagger API Docs</a>
+    <a href="maps/flight_map.html" target="_blank" class="btn btn-outline">Flight Map</a>
+  </div>
+</div>
+
+</main>
+
+<!-- ── Footer ── -->
+<footer>
+  <p>Flight Ops Intelligence · <a href="mailto:shaikn6@udayton.edu">shaikn6@udayton.edu</a> ·
+  <a href="https://linkedin.com/in/nagizaazshaik" target="_blank">LinkedIn</a> ·
+  All data is synthetic — no live API calls</p>
+</footer>
+
+</body>
+</html>
