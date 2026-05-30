@@ -1,9 +1,23 @@
-> 🔒 **Private Repository** — Source code available on request for verified employers and collaborators.
-> 📧 Contact: shaikn6@udayton.edu | [LinkedIn](https://linkedin.com/in/nagizaazshaik)
 
 ---
 
 # Flight Ops Intelligence — ML-Powered Aviation Analytics & Delay Prediction
+
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-22c55e)
+![Tests](https://img.shields.io/badge/Tests-passing-22c55e)
+![Stack](https://img.shields.io/badge/Stack-XGBoost-6366f1)
+
+
+## Quick Start
+
+```bash
+git clone https://github.com/shaikn6/flight-ops-intelligence.git
+cd flight-ops-intelligence
+pip install -r requirements.txt
+pytest tests/                    # run test suite
+streamlit run dashboard/app_v2.py    # launch dashboard
+```
 
 ## Situation
 US aviation handles 45,000 daily flights across 500+ airports. Weather causes 40% of all delays, costing airlines $8B annually. Predicting delays before departure enables proactive rerouting, gate reassignment, and passenger notification — but requires integrating weather, route, and historical performance data in real-time.
