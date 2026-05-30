@@ -1,6 +1,11 @@
 
 ---
 
+![Live Weather](https://img.shields.io/badge/weather-Open--Meteo%20live-blue?logo=cloud&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-59%20passing-brightgreen)
+![Python](https://img.shields.io/badge/python-3.11-blue)
+![Version](https://img.shields.io/badge/version-2.0.0-orange)
+
 # Flight Ops Intelligence — ML-Powered Aviation Analytics & Delay Prediction
 
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
@@ -150,4 +155,67 @@ docker-compose up --build
 
 ---
 
-*All data is synthetic — no live API calls required. Demonstrates data engineering, ML, and geospatial visualization skills.*
+## V2 — Live Weather Integration & Real-Time Prediction API
+
+### What's New in V2
+
+| Feature | Detail |
+|---------|--------|
+| Live weather | Open-Meteo API (free, no key) — temperature, wind, visibility, precipitation, cloud cover, WMO codes |
+| Weather risk score | 0.0–1.0 composite: wind / visibility / precipitation / cloud cover / thunderstorm |
+| Real-time delay API | `POST /predict-delay` combines ML model (70%) + live weather (30%) |
+| Airport weather lookup | `GET /airport-weather/{IATA}` for any of 50 US airports |
+| Route risk map | Interactive Folium HTML — arcs colored green/yellow/red by delay probability |
+| V2 test suite | 59 offline tests via MockWeatherClient |
+
+### V2 Architecture
+
+```
+src/
+├── weather_client.py   # Open-Meteo client + MockWeatherClient + AIRPORT_COORDS (50 airports)
+├── realtime_api.py     # FastAPI V2: /predict-delay, /airport-weather, /health
+└── route_map.py        # Folium route risk map generator
+tests/
+└── test_v2.py          # 59 tests — fully offline (MockWeatherClient)
+CHANGELOG.md
+```
+
+### V2 Quick Start
+
+```bash
+# Install (adds httpx for live weather)
+pip install -r requirements.txt
+
+# Run V2 real-time API (port 8001, separate from V1)
+uvicorn src.realtime_api:app --reload --port 8001
+
+# Example: predict delay for ATL → LAX
+curl -X POST http://localhost:8001/predict-delay \
+  -H "Content-Type: application/json" \
+  -d '{"origin":"ATL","destination":"LAX","scheduled_departure":"2026-06-01T08:00:00","airline":"DL","aircraft_type":"Boeing 737"}'
+
+# Get live airport weather
+curl http://localhost:8001/airport-weather/ATL
+
+# Run V2 tests (offline — no network required)
+pytest tests/test_v2.py -v
+```
+
+### Prediction Formula
+
+```
+final_probability = 0.70 × ML_model_probability + 0.30 × weather_risk_score
+expected_delay_minutes = final_probability × 90
+```
+
+Weather risk contributions:
+- Wind > 25 knots → +0.30
+- Visibility < 3 statute miles → +0.30
+- Precipitation > 0.1 mm/h → +0.20
+- Cloud cover > 80% → +0.10
+- Thunderstorm WMO code (80–82, 95–99) → +0.40
+- Capped at 1.0
+
+---
+
+*V1: synthetic data, no live calls. V2 adds real-time Open-Meteo weather integration with offline-safe MockWeatherClient for testing.*
