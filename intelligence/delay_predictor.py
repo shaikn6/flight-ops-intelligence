@@ -17,7 +17,7 @@ from sklearn.metrics import mean_absolute_error, classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
-from intelligence.flight_data import AIRPORTS, AIRCRAFT_TYPES, generate_flights, load_flights
+from intelligence.flight_data import AIRCRAFT_TYPES, load_flights
 from intelligence.weather_engine import WeatherEngine, get_engine
 
 # Model path is intentionally hardcoded — it is never derived from user input.

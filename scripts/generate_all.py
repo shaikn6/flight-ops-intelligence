@@ -28,11 +28,10 @@ matplotlib.use("Agg")   # non-interactive backend
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import numpy as np
-import pandas as pd
 
-from intelligence.flight_data import generate_flights, save_flights, AIRPORTS
+from intelligence.flight_data import generate_flights, save_flights
 from intelligence.weather_engine import WeatherEngine
-from intelligence.delay_predictor import train, FeatureBuilder, FEATURE_COLS
+from intelligence.delay_predictor import train, FEATURE_COLS
 from intelligence.atc_simulator import compute_sector_load, SECTOR_OVERLOAD_THRESHOLD
 
 # ---------------------------------------------------------------------------

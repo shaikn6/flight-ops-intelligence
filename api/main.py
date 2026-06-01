@@ -8,19 +8,18 @@ from __future__ import annotations
 import logging
 import os
 import re
-import json
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 
 from fastapi import FastAPI, Depends, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
-from pydantic import BaseModel, Field, field_validator
+from fastapi.responses import HTMLResponse, JSONResponse
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from api.database import get_db, init_db
-from api.models import Flight as FlightModel, WeatherReport as WeatherModel
+from api.models import Flight as FlightModel
 
 logger = logging.getLogger(__name__)
 
@@ -132,8 +131,7 @@ def startup() -> None:
 def _seed_database_if_empty() -> None:
     """Seed the SQLite database from generated CSV on first start."""
     from api.database import SessionLocal
-    from intelligence.flight_data import load_flights, AIRPORTS
-    from intelligence.weather_engine import get_engine
+    from intelligence.flight_data import load_flights
 
     db = SessionLocal()
     try:
@@ -333,7 +331,6 @@ def predict_delay(
 
     if distance_mi is None:
         if origin in AIRPORTS and dest in AIRPORTS:
-            import numpy as np
             o, d = AIRPORTS[origin], AIRPORTS[dest]
             lat1, lon1 = math.radians(o["lat"]), math.radians(o["lon"])
             lat2, lon2 = math.radians(d["lat"]), math.radians(d["lon"])

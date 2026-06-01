@@ -4,7 +4,6 @@ Tests for intelligence.delay_predictor module.
 
 import pytest
 import numpy as np
-from pathlib import Path
 
 from intelligence.delay_predictor import (
     predict_delay,
@@ -89,7 +88,6 @@ class TestPredictDelay:
     @pytest.fixture(autouse=True)
     def _ensure_model(self):
         """Ensure model is trained before inference tests."""
-        from intelligence.delay_predictor import _models
         import intelligence.delay_predictor as _dp
         if _dp._models is None:
             df = generate_flights(n=300, seed=42)
@@ -161,7 +159,6 @@ class TestPredictDelay:
 class TestGetFeatureImportances:
     @pytest.fixture(autouse=True)
     def _ensure_model(self):
-        from intelligence.delay_predictor import _models
         import intelligence.delay_predictor as _dp
         if _dp._models is None:
             df = generate_flights(n=300, seed=42)

@@ -8,7 +8,6 @@ from __future__ import annotations
 import random
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import NamedTuple
 
 import numpy as np
 import pandas as pd

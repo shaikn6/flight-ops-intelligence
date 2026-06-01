@@ -179,13 +179,13 @@ class WeatherEngine:
 
         vis = profile["base_visibility"]
         ceil = profile["base_ceiling"]
-        wind = profile["wind_mean"]
-        temp = profile["base_temp_c"]
+        profile["wind_mean"]
+        profile["base_temp_c"]
 
         for h in range(n_hours):
             ts = start + timedelta(hours=h)
             hour = ts.hour
-            day = h // 24
+            h // 24
 
             # --- Diurnal patterns ---
             # Morning fog (hours 5-9): reduce visibility & ceiling

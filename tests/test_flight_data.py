@@ -2,7 +2,6 @@
 Tests for intelligence.flight_data module.
 """
 
-import pytest
 import pandas as pd
 from datetime import datetime
 

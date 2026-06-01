@@ -164,7 +164,6 @@ def gen_route_arcs():
     ax.set_facecolor(BG)
 
     # Draw arcs as bezier-like curves between hub pairs
-    import matplotlib.patheffects as pe
 
     for i, (origin, dest) in enumerate(_ROUTE_PAIRS[:20]):
         if origin not in _HUB_COORDS or dest not in _HUB_COORDS:

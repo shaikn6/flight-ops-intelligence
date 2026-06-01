@@ -13,13 +13,9 @@ Covers:
 from __future__ import annotations
 
 import os
-import sqlite3
 import sys
-import time
-import tempfile
 from pathlib import Path
 
-import pytest
 
 # Ensure project root on path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -32,7 +28,6 @@ from live.opensky_client import (
     _generate_mock_aircraft,
     filter_us_airspace,
     get_aircraft_states,
-    get_cache_age_seconds,
     parse_opensky_response,
     US_LAT_MIN,
     US_LAT_MAX,

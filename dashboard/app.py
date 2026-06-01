@@ -11,15 +11,13 @@ from pathlib import Path
 # Allow imports from project root
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import numpy as np
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 import streamlit as st
 
 from intelligence.flight_data import AIRPORTS, load_flights
-from intelligence.weather_engine import WeatherEngine, CLIMATE_PROFILES
-from intelligence.delay_predictor import predict_delay, get_feature_importances, load_models
+from intelligence.weather_engine import WeatherEngine
+from intelligence.delay_predictor import predict_delay
 from intelligence.route_analyzer import compute_route_risk_score
 from intelligence.atc_simulator import compute_sector_load, identify_overloaded_sectors
 

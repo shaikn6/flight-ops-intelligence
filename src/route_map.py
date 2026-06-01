@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import html as _html
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List
 
 import folium
 

@@ -22,7 +22,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import numpy as np
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -64,22 +63,22 @@ _PYDECK_OK = False
 _DUCKDB_OK = False
 
 try:
-    from live.opensky_client import get_aircraft_states, AircraftState, _generate_mock_aircraft
+    from live.opensky_client import get_aircraft_states
     from live.globe_renderer import build_scatter_data, build_route_arcs, render_to_html
     _PYDECK_OK = True
 except ImportError as _e:
     st.sidebar.warning(f"PyDeck/live module unavailable: {_e}")
 
 try:
-    from analytics.duckdb_engine import get_engine, DuckDBEngine
+    from analytics.duckdb_engine import get_engine
     _DUCKDB_OK = True
 except ImportError as _e:
     st.sidebar.warning(f"DuckDB module unavailable: {_e}")
 
 # V1 imports (always available)
-from intelligence.flight_data import AIRPORTS, AIRCRAFT_TYPES, load_flights
-from intelligence.weather_engine import WeatherEngine, get_engine as get_weather_engine
-from intelligence.delay_predictor import predict_delay, load_models
+from intelligence.flight_data import AIRPORTS, AIRCRAFT_TYPES
+from intelligence.weather_engine import WeatherEngine
+from intelligence.delay_predictor import predict_delay
 
 # ---------------------------------------------------------------------------
 # Sidebar
@@ -151,7 +150,6 @@ with tab1:
         else:
             # Inline PyDeck fallback
             try:
-                import pydeck as pdk
                 from live.globe_renderer import build_deck
                 deck = build_deck(states)
                 st.pydeck_chart(deck)

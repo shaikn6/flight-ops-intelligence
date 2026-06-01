@@ -7,7 +7,6 @@ MockWeatherClient: returns deterministic fake data for offline testing.
 
 from __future__ import annotations
 
-from typing import Optional
 
 import httpx
 

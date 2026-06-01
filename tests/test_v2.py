@@ -13,7 +13,6 @@ from fastapi.testclient import TestClient
 from src.weather_client import (
     AIRPORT_COORDS,
     MockWeatherClient,
-    WeatherClient,
 )
 from src.route_map import FlightRoute, generate_route_risk_map
 
