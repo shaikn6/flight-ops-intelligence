@@ -1,7 +1,3 @@
-> **Private Repository** — Source code available on request for verified employers.
-> Contact: shaikn6@udayton.edu
-
-
 ---
 
 ![Live Weather](https://img.shields.io/badge/weather-Open--Meteo%20live-blue?logo=cloud&logoColor=white)
